@@ -1,5 +1,5 @@
 import type { Tabbar } from '@/types/global'
-import type { RouteLocationNormalizedLoaded } from 'vue-router'
+import type { RouteLocationNormalized } from 'vue-router'
 import { requestClient } from '@/api'
 import storage from '@/utils/storage'
 import { cloneDeep } from 'es-toolkit'
@@ -24,18 +24,20 @@ const useTabbarStore = defineStore(
     // 添加常驻标签页
     function initPermanentTab() {
       const tabs: Tabbar.recordRaw[] = []
-      routeStore.flatSystemRoutes.forEach((items) => {
+      routeStore.systemRoutes.forEach((items) => {
         items.children && items.children.forEach((route) => {
           if (route.meta?.permanent) {
-            // route.meta?.breadcrumbNeste?[1]
-            const fullPath = route.meta?.breadcrumbNeste?.[route.meta?.breadcrumbNeste.length - 1]?.path
-            const tabId = settingsStore.settings.tabbar.mergeTabsBy === 'activeMenu' ? (route.meta.activeMenu || route.meta.breadcrumbNeste?.at(-1)?.path) : route.meta.breadcrumbNeste?.at(-1)?.path
+            const fullPath = routeStore.getRouteMatchedByPath(route.path).at(-1)?.path
+            const tabId = (settingsStore.settings.tabbar.mergeTabsBy === 'activeMenu' && route.meta.activeMenu) || fullPath
             tabs.push({
               tabId: `${tabId}`,
               fullPath: `${fullPath}`,
+              routeName: route.name,
               activeMenu: route.meta.activeMenu,
               title: typeof route.meta.title === 'function' ? route.meta.title() : route.meta.title,
-              activeIcon: route.meta.activeIcon,
+              iframe: route.meta.iframe,
+              icon: route.meta.icon ?? routeStore.getRouteMatchedByPath(route.path).findLast(item => item.meta?.icon)?.meta?.icon,
+              activeIcon: route.meta.activeIcon ?? routeStore.getRouteMatchedByPath(route.path).findLast(item => item.meta?.activeIcon)?.meta?.activeIcon,
               name: route.name ? [String(route.name)] : [],
               customTitleList: [],
               isPin: false,
@@ -44,12 +46,12 @@ const useTabbarStore = defineStore(
           }
         })
       })
-      routeStore.flatRoutes.forEach((items) => {
+      routeStore.routes.forEach((items) => {
         if (settingsStore.settings.app.routeBaseOn !== 'filesystem') {
           items.children && items.children.forEach((route) => {
             if (route.meta?.permanent) {
-              const fullPath = route.meta?.breadcrumbNeste?.[route.meta.breadcrumbNeste.length - 1]!.path
-              const tabId = settingsStore.settings.tabbar.mergeTabsBy === 'activeMenu' ? (route.meta.activeMenu || route.meta.breadcrumbNeste?.at(-1)?.path) : route.meta.breadcrumbNeste?.at(-1)?.path
+              const fullPath = routeStore.getRouteMatchedByPath(route.path).at(-1)?.path
+              const tabId = (settingsStore.settings.tabbar.mergeTabsBy === 'activeMenu' && route.meta.activeMenu) || fullPath
               tabs.push({
                 tabId: `${tabId}`,
                 fullPath: `${fullPath}`,
@@ -57,6 +59,8 @@ const useTabbarStore = defineStore(
                 activeMenu: route.meta.activeMenu,
                 title: typeof route.meta.title === 'function' ? route.meta.title() : route.meta.title,
                 iframe: route.meta.iframe,
+                icon: route.meta.icon ?? routeStore.getRouteMatchedByPath(route.path).findLast(item => item.meta?.icon)?.meta?.icon,
+                activeIcon: route.meta.activeIcon ?? routeStore.getRouteMatchedByPath(route.path).findLast(item => item.meta?.activeIcon)?.meta?.activeIcon,
                 name: route.name ? [String(route.name)] : [],
                 customTitleList: [],
                 isPin: false,
@@ -75,6 +79,8 @@ const useTabbarStore = defineStore(
               activeMenu: items.meta.activeMenu,
               title: typeof items.meta.title === 'function' ? items.meta.title() : items.meta.title,
               iframe: items.meta.iframe,
+              icon: items.meta.icon ?? routeStore.getRouteMatchedByPath(items.path).findLast(item => item.meta?.icon)?.meta?.icon,
+              activeIcon: items.meta.activeIcon ?? routeStore.getRouteMatchedByPath(items.path).findLast(item => item.meta?.activeIcon)?.meta?.activeIcon,
               name: items.name ? [String(items.name)] : [],
               customTitleList: [],
               isPin: false,
@@ -87,7 +93,7 @@ const useTabbarStore = defineStore(
       tabs.length && list.value.unshift(...tabs)
     }
     // 添加标签页
-    function add(route: RouteLocationNormalizedLoaded) {
+    function add(route: RouteLocationNormalized) {
       return new Promise<void>((resolve) => {
         const names: string[] = []
         route.matched.forEach((v, i) => {
@@ -107,8 +113,8 @@ const useTabbarStore = defineStore(
             tabbar.activeMenu = meta?.activeMenu
             tabbar.title = typeof meta?.title === 'function' ? meta.title() : meta?.title
             tabbar.iframe = meta?.iframe
-            tabbar.icon = meta?.icon || meta?.breadcrumbNeste?.findLast(item => item.icon)?.icon
-            tabbar.activeIcon = meta?.activeIcon || meta?.breadcrumbNeste?.findLast(item => item.activeIcon)?.activeIcon
+            tabbar.icon = meta?.icon ?? route.matched?.findLast(item => item.meta?.icon)?.meta?.icon
+            tabbar.activeIcon = meta?.activeIcon ?? route.matched?.findLast(item => item.meta?.activeIcon)?.meta?.activeIcon
           }
           else {
             const tabbar = {
@@ -118,8 +124,8 @@ const useTabbarStore = defineStore(
               activeMenu: meta?.activeMenu,
               title: typeof meta?.title === 'function' ? meta.title() : meta?.title,
               iframe: meta?.iframe,
-              icon: meta?.icon || meta?.breadcrumbNeste?.findLast(item => item.icon)?.icon,
-              activeIcon: meta?.activeIcon || meta?.breadcrumbNeste?.findLast(item => item.activeIcon)?.activeIcon,
+              icon: meta?.icon ?? route.matched?.findLast(item => item.meta?.icon)?.meta?.icon,
+              activeIcon: meta?.activeIcon ?? route.matched?.findLast(item => item.meta?.activeIcon)?.meta?.activeIcon,
               name: names,
               customTitleList: [],
               isPin: false,
@@ -326,14 +332,6 @@ const useTabbarStore = defineStore(
     function sort(newIndex: number, oldIdex: number) {
       list.value.splice(newIndex, 0, list.value.splice(oldIdex, 1)[0])
     }
-    // 修改标签页标题
-    function editTitle({ tabId, title }: { tabId: string, title: string }) {
-      list.value.forEach((item) => {
-        if (item.tabId === tabId && item.title !== title) {
-          item.title = title
-        }
-      })
-    }
     function setCustomTitle({ tabId, title }: {
       tabId: Tabbar.recordRaw['tabId']
       title: string
@@ -418,7 +416,6 @@ const useTabbarStore = defineStore(
       unPin,
       clean,
       sort,
-      editTitle,
       setCustomTitle,
       resetCustomTitle,
       recoveryStorage,
