@@ -1,5 +1,4 @@
 import type { ActionEnum } from '@/enums/commonEnum'
-import type { FormRules } from 'element-plus'
 import type { ComponentRenderProxy, VNode } from 'vue'
 import type { RouteRecordRaw } from 'vue-router'
 
@@ -457,6 +456,7 @@ declare module 'vue-router' {
     activeMenu?: string
     singleMenu?: boolean
     breadcrumb?: boolean
+    sort?: number
     cache?: boolean | string | string[]
     noCache?: string | string[]
     badge?: boolean | string | number | (() => boolean | string | number)
@@ -470,7 +470,6 @@ declare module 'vue-router' {
     copyright?: boolean
     whiteList?: boolean
     // sort?: number
-    breadcrumbNeste?: Route.breadcrumb[]
   }
 }
 
@@ -483,6 +482,7 @@ declare namespace Route {
       auth?: string | string[]
       auths?: { name: string, value: string }[]
       badge?: boolean | string | number | (() => boolean | string | number)
+      sort?: number
       badgeVariant?: 'default' | 'secondary' | 'destructive' | (() => 'default' | 'secondary' | 'destructive')
       query?: Record<string, any>
     }
@@ -598,12 +598,6 @@ declare type DataConfig<SEARCH = any, T = any> = Record<any, any> & {
   // 列表数据
   dataList: T[]
   dicts?: Map
-}
-declare type FormConfig<T = any> = Recordable & {
-  loading?: boolean
-  form: T
-  rules: FormRules<typeof T>
-  dicts?: Map<string, any>
 }
 declare type TreeConfig<T = any> = Recordable & {
   tableAutoHeight: boolean

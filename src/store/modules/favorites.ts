@@ -62,7 +62,7 @@ const useFavoritesStore = defineStore(
         list.value.push({
           fullPath: route.fullPath,
           title: meta?.title,
-          icon: meta?.icon ?? meta?.breadcrumbNeste?.findLast(item => item.icon)?.icon,
+          icon: meta?.icon ?? route.matched?.findLast(item => item.meta?.icon)?.meta?.icon,
         })
       }
       updateStorage()
