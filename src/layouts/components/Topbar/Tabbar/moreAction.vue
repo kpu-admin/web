@@ -103,7 +103,7 @@ function iconName(isActive: boolean, icon: Tabbar.recordRaw['icon'], activeIcon:
           <div class="flex-center-between gap-2 p-4">
             <template v-if="isNavSearch">
               <KpuInput
-                :placeholder="$t('searchPlaceholder')"
+                :placeholder="$t('app.tabbar.searchPlaceholder')"
                 class="h-8 w-0 flex-1 border border-input rounded-md bg-background px-3 py-2 text-sm placeholder:text-muted-foreground focus-visible:outline-none"
               />
               <KpuButton variant="outline" size="icon" class="h-8 w-8" @click="isNavSearch = false">

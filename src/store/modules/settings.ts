@@ -112,6 +112,14 @@ const useSettingsStore = defineStore(
         os.value = 'linux'
         break
     }
+
+    // 页面是否刷新
+    const isReloading = ref(false)
+    // 切换当前页面是否刷新
+    function setIsReloading(value?: boolean) {
+      isReloading.value = value ?? !isReloading.value
+    }
+
     const lock = ref<boolean>(localStorage.getItem(`${settings.value.app.storagePrefix}lock`) === 'true')
 
     // 页面标题
@@ -251,6 +259,8 @@ const useSettingsStore = defineStore(
       currentColorScheme,
       os,
       lock,
+      isReloading,
+      setIsReloading,
       title,
       setTitle,
       customTitleList,

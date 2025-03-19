@@ -4,9 +4,11 @@ import Breadcrumb from '@/layouts/components/Breadcrumb/index.vue'
 import BreadcrumbItem from '@/layouts/components/Breadcrumb/item.vue'
 import { $t } from '@/locales/utils'
 import useMenuStore from '@/store/modules/menu'
+import useRouteStore from '@/store/modules/route'
 import useSettingsStore from '@/store/modules/settings'
 import { useKpuModal } from '@/ui/components/KpuModal/use-modal.ts'
 import { resolveRoutePath } from '@/utils'
+import { useFocus } from '@vueuse/core'
 import { cloneDeep } from 'es-toolkit'
 import hotkeys from 'hotkeys-js'
 import { match } from 'pinyin-pro'
@@ -16,6 +18,7 @@ defineOptions({
 })
 
 const router = useRouter()
+const routeStore = useRouteStore()
 const settingsStore = useSettingsStore()
 const menuStore = useMenuStore()
 const { generateI18nTitle } = useMenu()
@@ -34,7 +37,13 @@ interface listTypes {
 const searchInput = ref('')
 const sourceList = ref<listTypes[]>([])
 const actived = ref(-1)
+const searchInputRef = useTemplateRef('searchInputRef')
+const { focused: searchInputFocused } = useFocus(searchInputRef)
+
 const [KpuModal, modalApi] = useKpuModal({
+  onOpened() {
+    searchInputFocused.value = true
+  },
   onOpenChange(val) {
     if (val) {
       searchInput.value = ''
@@ -58,6 +67,7 @@ const [KpuModal, modalApi] = useKpuModal({
     }
   },
 })
+
 const dialogAreaRef = useTemplateRef('dialogAreaRef')
 const searchResultItemRef = useTemplateRef<HTMLElement[]>('searchResultItemRef')
 
@@ -69,16 +79,16 @@ const resultList = computed(() => {
       if (item.path.includes(searchInput.value)) {
         flag = true
       }
-      const title = match(generateI18nTitle(item.title).toString(), searchInput.value, { continuous: true })
+      const title = match(generateI18nTitle(item.title)?.toString(), searchInput.value, { continuous: true })
       if (
-        generateI18nTitle(item.title).toString().includes(searchInput.value)
+        generateI18nTitle(item.title)?.toString().includes(searchInput.value)
         || (title && title.length > 0)
       ) {
         flag = true
       }
-      if (item.breadcrumb.some((b) => {
-        const title1 = match(generateI18nTitle(b.title).toString(), searchInput.value, { continuous: true })
-        return generateI18nTitle(b.title).toString().includes(searchInput.value)
+      if (routeStore.getRouteMatchedByPath(item.path).some((b) => {
+        const title1 = match(generateI18nTitle(b.meta.title).toString(), searchInput.value, { continuous: true })
+        return generateI18nTitle(b.meta.title).toString().includes(searchInput.value)
           || (title1 && title1?.length > 0)
       })) {
         flag = true
@@ -214,7 +224,7 @@ function pageJump(path: listTypes['path'], link: listTypes['link']) {
         <div class="h-full w-14 flex-center">
           <KpuIcon name="i-ri:search-line" :size="18" class="text-foreground/30" />
         </div>
-        <input v-model="searchInput" :placeholder="$t('app.search.input')" class="h-full w-full border-0 rounded-md bg-transparent text-base text-foreground focus-outline-none placeholder-foreground/30" @keydown.up.prevent="keyUp" @keydown.down.prevent="keyDown" @keydown.enter.prevent="keyEnter">
+        <input ref="searchInputRef" v-model="searchInput" :placeholder="$t('app.search.input')" class="h-full w-full border-0 rounded-md bg-transparent text-base text-foreground focus-outline-none placeholder-foreground/30" @keydown.up.prevent="keyUp" @keydown.down.prevent="keyDown" @keydown.enter.prevent="keyEnter">
         <div v-if="settingsStore.mode === 'mobile'" class="h-full w-14 flex-center border-s">
           <KpuIcon name="i-carbon:close" :size="18" @click="() => modalApi.close()" />
         </div>
@@ -247,7 +257,7 @@ function pageJump(path: listTypes['path'], link: listTypes['link']) {
         </div>
       </div>
     </template>
-    <KpuScrollArea ref="dialogAreaRef" class="flex-1">
+    <KpuScrollArea ref="dialogAreaRef" :scrollbar="false" class="flex-1">
       <div>
         <template v-if="resultList.length > 0">
           <div v-for="(item, index) in resultList" ref="searchResultItemRef" :key="item.path" class="p-4" :data-index="index" @click="pageJump(item.path, item.link)" @mouseover="actived = index">

@@ -5,10 +5,21 @@ import { icons as iconss } from '@/iconify'
 defineOptions({
   name: 'KpuIconPicker',
 })
-withDefaults(defineProps<{
+const props = withDefaults(defineProps<{
   size?: 'large' | 'default' | 'small'
+  /** Input组件 */
+  inputComponent?: VNode
+  /** 图标插槽名，预览图标将被渲染到此插槽中 */
+  iconSlot?: string
+  /** input组件的值属性名称 */
+  modelValueProp?: string
+  type?: 'icon' | 'input'
 }>(), {
   size: 'default',
+  iconSlot: 'default',
+  modelValueProp: 'modelValue',
+  inputComponent: undefined,
+  type: 'input',
 })
 const icons = [...iconss]
 // 插入第3个位置
@@ -27,12 +38,11 @@ icons.splice(2, 0, {
   },
   icons: svgs,
 })
-const value = defineModel<string>({
-  default: '',
-})
+const modelValue = defineModel({ default: '', type: String })
+
 const attrs = useAttrs()
 const dialogVisible = ref(false)
-const activeName = ref(icons.some(item => item.prefix === value.value.split(':')[0]) ? value.value.split(':')[0] : icons[0].prefix)
+const activeName = ref(icons.some(item => item.prefix === modelValue.value.split(':')[0]) ? modelValue.value.split(':')[0] : icons[0].prefix)
 const search = ref('')
 const pagination = ref({
   page: 1,
@@ -82,12 +92,12 @@ const currentIconList = computed(() => {
 // }
 
 function chooseIcon(val: string) {
-  value.value = val
+  modelValue.value = val
   dialogVisible.value = false
 }
 
 function removeIcon() {
-  value.value = ''
+  modelValue.value = ''
   dialogVisible.value = false
 }
 function handleTabChange(prefix: string) {
@@ -97,25 +107,60 @@ function handleTabChange(prefix: string) {
 </script>
 
 <template>
-  <KpuPopover :collision-padding="5" class="p-0">
-    <slot :icon="value">
-      <KpuButton
-        variant="outline"
-        class="&_svg]:size-inherit"
-        size="icon"
-        :class="{
-          'empty': value === '',
-          [`icon-picker--${size}`]: true,
-          'is-disabled': attrs.disabled === true,
-        }" @click="dialogVisible = true"
+  <KpuPopover v-model:open="dialogVisible" :collision-padding="5" class="z-3000 p-0">
+    <template v-if="props.type === 'input'">
+      <component
+        :is="inputComponent"
+        v-if="props.inputComponent"
+        v-model:value="modelValue"
+        :placeholder="$t('ui.iconPicker.placeholder')"
+        role="combobox"
+        :aria-label="$t('ui.iconPicker.placeholder')"
+        v-bind="$attrs"
       >
-        <KpuIcon
-          :name="value !== '' && value != null ? value : 'i-whh:googleplusold'" :size="16"
-          :class="{ 'opacity-20': value === '' }"
+        <template #[iconSlot]>
+          <KpuIcon
+            :name="modelValue !== '' && modelValue != null ? modelValue : 'i-whh:googleplusold'" :size="16"
+            :class="{ 'opacity-20': modelValue === '' }"
+            aria-hidden="true"
+          />
+        </template>
+      </component>
+      <div v-else class="relative w-full">
+        <KpuInput
+          v-bind="$attrs"
+          v-model="modelValue"
+          :placeholder="$t('ui.iconPicker.placeholder')"
+          class="h-8 w-full pr-8"
+          :class="{ 'is-disabled': attrs.disabled === true }"
+          role="combobox"
+          :aria-label="$t('ui.iconPicker.placeholder')"
+          aria-expanded="visible"
         />
-      </KpuButton>
-    </slot>
-    <!-- TODO 重构弹窗，不使用 element-plus 组件 -->
+        <KpuIcon
+          :name="modelValue !== '' && modelValue != null ? modelValue : 'i-whh:googleplusold'" :size="16"
+          :class="{ 'opacity-20': modelValue === '' }"
+          class="right-2 top-2 !absolute"
+          aria-hidden="true"
+        />
+      </div>
+    </template>
+    <KpuButton
+      v-else
+      variant="outline"
+      class="[&_svg]:size-inherit"
+      size="icon"
+      :class="{
+        'empty': modelValue === '',
+        [`icon-picker--${size}`]: true,
+        'is-disabled': attrs.disabled === true,
+      }" @click="dialogVisible = true"
+    >
+      <KpuIcon
+        :name="modelValue !== '' && modelValue != null ? modelValue : 'i-whh:googleplusold'" :size="16"
+        :class="{ 'opacity-20': modelValue === '' }"
+      />
+    </KpuButton>
     <template #panel>
       <div class="h-500px w-600px flex-center of-hidden rounded-md">
         <KpuScrollArea :scrollbar="false" mask class="h-full w-150px shrink-0 border-r">
@@ -160,3 +205,14 @@ function handleTabChange(prefix: string) {
     </template>
   </KpuPopover>
 </template>
+
+<style>
+.is-disabled {
+  color: rgb(0 0 0 / 25%) !important;
+  cursor: not-allowed !important;
+  background-color: rgb(0 0 0 / 4%) !important;
+  border-color: #d9d9d9 !important;
+  box-shadow: none !important;
+  opacity: 1 !important;
+}
+</style>

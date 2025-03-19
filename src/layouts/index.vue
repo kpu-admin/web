@@ -1,4 +1,5 @@
 <script setup lang="ts">
+import { ELEMENT_ID_MAIN_CONTENT } from '@/enums/globals.ts'
 import { useSlots } from '@/slots'
 import useKeepAliveStore from '@/store/modules/keepAlive'
 import useMenuStore from '@/store/modules/menu'
@@ -31,7 +32,6 @@ const menuStore = useMenuStore()
 useWatermarkStore()
 
 const mainPage = useMainPage()
-const menu = useMenu()
 
 // 头部当前实际高度
 const headerActualHeight = computed(() => {
@@ -118,18 +118,6 @@ watch(() => routeInfo.path, () => {
 })
 
 onMounted(() => {
-  hotkeys('f5', (e) => {
-    if (settingsStore.settings.toolbar.pageReload) {
-      e.preventDefault()
-      mainPage.reload()
-    }
-  })
-  hotkeys('alt+`', (e) => {
-    if (settingsStore.settings.menu.enableHotkeys) {
-      e.preventDefault()
-      menu.switchTo(menuStore.actived + 1 < menuStore.allMenus.length ? menuStore.actived + 1 : 0)
-    }
-  })
   hotkeys('alt+up,alt+down', (e, handle) => {
     e.preventDefault()
     switch (handle.key) {
@@ -143,8 +131,6 @@ onMounted(() => {
   })
 })
 onUnmounted(() => {
-  hotkeys.unbind('f5')
-  hotkeys.unbind('alt+`')
   hotkeys.unbind('alt+up,alt+down')
 })
 
@@ -160,6 +146,7 @@ function handleMouseleave() {
   }, 300))
 }
 const enableAppSetting = import.meta.env.VITE_APP_SETTING
+const idMainContent = ELEMENT_ID_MAIN_CONTENT
 </script>
 
 <template>
@@ -179,15 +166,15 @@ const enableAppSetting = import.meta.env.VITE_APP_SETTING
           <MainSidebar />
           <SubSidebar />
         </div>
-        <div class="invisible fixed inset-0 z-1009 bg-black/50 op-0 backdrop-blur-sm transition-opacity" :class="{ 'op-100! visible!': settingsStore.mode === 'mobile' && !settingsStore.settings.menu.subMenuCollapse }" @click="settingsStore.toggleSidebarCollapse()" />
-        <div class="main-container pb-[var(--g-main-container-padding-bottom)]">
+        <div class="invisible fixed inset-0 z-209 bg-black/50 op-0 backdrop-blur-sm transition-opacity" :class="{ 'op-100! visible!': settingsStore.mode === 'mobile' && !settingsStore.settings.menu.subMenuCollapse }" @click="settingsStore.toggleSidebarCollapse()" />
+        <div :id="idMainContent" class="main-container pb-[var(--g-main-container-padding-bottom)]">
           <Topbar />
           <div class="main">
             <div v-show="settingsStore.mainPageMaximizeStatus" class="exit-main-page-maximize" @click="settingsStore.setMainPageMaximize()">
               <KpuIcon name="i-ri:logout-box-line" />
             </div>
             <RouterView v-slot="{ Component, route }">
-              <Transition :name="settingsStore.settings.mainPage.enableTransition ? settingsStore.settings.mainPage.transitionMode : ''" mode="out-in">
+              <Transition :name="settingsStore.settings.mainPage.enableTransition && !settingsStore.isReloading ? settingsStore.settings.mainPage.transitionMode : ''" mode="out-in">
                 <KeepAlive :include="keepAliveStore.list">
                   <Suspense>
                     <component :is="Component" v-show="!(isIframe || isLink)" :key="route.fullPath" />
@@ -307,14 +294,16 @@ const enableAppSetting = import.meta.env.VITE_APP_SETTING
     position: fixed;
     top: var(--g-header-actual-height);
     bottom: 0;
-    z-index: 1010;
+    z-index: 200;
     display: flex;
     width: calc(var(--g-main-sidebar-actual-width) + var(--g-sub-sidebar-actual-width));
     box-shadow: -1px 0 hsl(var(--border)), 1px 0 hsl(var(--border));
     transition: width 0.3s, transform 0.3s, box-shadow 0.3s, top 0.3s;
 
     &:has(> .main-sidebar-container.main-sidebar-enter-active),
-    &:has(> .main-sidebar-container.main-sidebar-leave-active) {
+    &:has(> .main-sidebar-container.main-sidebar-leave-active),
+    &:has(> .sub-sidebar-container.sub-sidebar-enter-active),
+    &:has(> .sub-sidebar-container.sub-sidebar-leave-active) {
       overflow: hidden;
     }
   }
@@ -345,7 +334,7 @@ const enableAppSetting = import.meta.env.VITE_APP_SETTING
         position: fixed;
         top: -40px;
         right: -40px;
-        z-index: 1000;
+        z-index: 201;
         width: 80px;
         height: 80px;
         cursor: pointer;

@@ -15,37 +15,40 @@ const settingsStore = useSettingsStore()
 const menuStore = useMenuStore()
 
 const { generateI18nTitle } = useMenu()
+let breadcrumbListBackup: any = []
 
 const breadcrumbList = computed(() => {
-  const breadcrumbList = []
+  if (route.name === 'reload') {
+    return breadcrumbListBackup
+  }
+  const list = []
   if (settingsStore.settings.home.enable) {
-    breadcrumbList.push({
+    list.push({
       path: settingsStore.settings.home.fullPath,
       title: generateI18nTitle(settingsStore.settings.home.title),
     })
   }
   if (route.fullPath !== settingsStore.settings.home.fullPath && settingsStore.settings.breadcrumb.enableMainMenu && !['single'].includes(settingsStore.settings.menu.mode)) {
     const index = menuStore.allMenus.findIndex(item => item.children.some(r => route.fullPath.indexOf(`${r.path}/`) === 0 || route.fullPath === r.path))
-    menuStore.allMenus[index]?.meta && breadcrumbList.push({
+    menuStore.allMenus[index]?.meta && list.push({
       path: '',
       title: generateI18nTitle(menuStore.allMenus[index].meta?.title),
     })
   }
-  if (route.meta.breadcrumbNeste) {
-    route.meta.breadcrumbNeste.forEach((item) => {
-      if (item.hide === false) {
-        breadcrumbList.push({
-          path: item.path,
-          title: generateI18nTitle(item.title),
-        })
-      }
-    })
-    const findItem = settingsStore.customTitleList.find(item => item.fullPath === route.fullPath)
-    if (findItem) {
-      breadcrumbList[breadcrumbList.length - 1].title = findItem.title
+  route.matched.forEach((item) => {
+    if (item.meta?.breadcrumb !== false) {
+      list.push({
+        path: item.path,
+        title: generateI18nTitle(item.meta?.title),
+      })
     }
+  })
+  const findItem = settingsStore.customTitleList.find(item => item.fullPath === route.fullPath)
+  if (findItem && list.length > 0) {
+    list[list.length - 1].title = findItem.title
   }
-  return breadcrumbList
+  breadcrumbListBackup = list
+  return list
 })
 
 function pathCompile(path: string) {

@@ -70,6 +70,14 @@ onMounted(() => {
               </KpuKbd>
               {{ $t('app.hotkeys.nav.next') }}
             </li>
+            <li class="flex-baseline gap-2 py-1">
+              <div class="flex-shrink-0 space-x-1">
+                <KpuKbd>{{ settingsStore.os === 'mac' ? '⌥' : 'Alt' }}</KpuKbd>
+                <KpuKbd>{{ settingsStore.os === 'mac' ? '⇧' : 'Shift' }}</KpuKbd>
+                <KpuKbd>`</KpuKbd>
+              </div>
+              激活上一个主导航
+            </li>
           </ul>
         </div>
         <div v-if="settingsStore.settings.tabbar.enable && settingsStore.settings.tabbar.enableHotkeys">

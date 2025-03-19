@@ -55,66 +55,68 @@ watch(() => menuStore.actived, (val, oldVal) => {
 </script>
 
 <template>
-  <div
-    v-if="enableSidebar" class="sub-sidebar-container" :class="{
-      'is-collapse': isCollapse,
-      'shadow-side': settingsStore.isHoverSidebar && settingsStore.settings.menu.subMenuAutoCollapse && settingsStore.settings.menu.subMenuCollapse,
-    }"
-  >
-    <component :is="useSlots('sub-sidebar-top')" />
-    <Logo
-      v-if="['side', 'single'].includes(settingsStore.settings.menu.mode)" :show-logo="settingsStore.settings.menu.mode === 'single'" class="sidebar-logo" :class="{
-        single: settingsStore.settings.menu.mode === 'single',
-      }"
-    />
-    <component :is="useSlots('sub-sidebar-after-logo')" />
-    <KpuScrollArea :scrollbar="false" mask gradient-color="var(--g-sub-sidebar-bg)" class="flex-1">
-      <TransitionGroup :name="transitionName">
-        <template v-for="(mainItem, mainIndex) in menuStore.allMenus" :key="mainIndex">
-          <div v-show="mainIndex === menuStore.actived">
-            <Menu
-              :menu="mainItem.children" :value="route.meta.activeMenu || route.path"
-              :default-openeds="menuStore.defaultOpenedPaths"
-              :always-openeds="menuStore.alwaysOpenedPaths"
-              :accordion="settingsStore.settings.menu.subMenuUniqueOpened"
-              :collapse="isCollapse"
-              :direction="settingsStore.settings.app.direction"
-              class="menu"
-              :class="{
-                '-mt-2': !(isCollapse || ['head', 'single'].includes(settingsStore.settings.menu.mode)),
-              }"
-            />
-          </div>
-        </template>
-      </TransitionGroup>
-    </KpuScrollArea>
+  <Transition name="sub-sidebar">
     <div
-      v-if="settingsStore.mode === 'pc' && settingsStore.settings.menu.enableSubMenuCollapseButton" class="relative flex items-center px-4 py-3" :class="{
-        'justify-center': isCollapse,
-        'justify-between': !isCollapse,
+      v-if="enableSidebar" class="sub-sidebar-container" :class="{
+        'is-collapse': isCollapse,
+        'shadow-side': settingsStore.isHoverSidebar && settingsStore.settings.menu.subMenuAutoCollapse && settingsStore.settings.menu.subMenuCollapse,
       }"
     >
-      <KpuButton
-        v-show="!isCollapse"
-        variant="secondary"
-        size="icon"
-        class="h-8 w-8"
-        @click="settingsStore.toggleSidebarAutoCollapse()"
+      <component :is="useSlots('sub-sidebar-top')" />
+      <Logo
+        v-if="['side', 'single'].includes(settingsStore.settings.menu.mode)" :show-logo="settingsStore.settings.menu.mode === 'single'" class="sidebar-logo" :class="{
+          single: settingsStore.settings.menu.mode === 'single',
+        }"
+      />
+      <component :is="useSlots('sub-sidebar-after-logo')" />
+      <KpuScrollArea :scrollbar="false" mask gradient-color="var(--g-sub-sidebar-bg)" class="flex-1">
+        <TransitionGroup :name="transitionName">
+          <template v-for="(mainItem, mainIndex) in menuStore.allMenus" :key="mainIndex">
+            <div v-show="mainIndex === menuStore.actived">
+              <Menu
+                :menu="mainItem.children" :value="route.meta.activeMenu || route.path"
+                :default-openeds="menuStore.defaultOpenedPaths"
+                :always-openeds="menuStore.alwaysOpenedPaths"
+                :accordion="settingsStore.settings.menu.subMenuUniqueOpened"
+                :collapse="isCollapse"
+                :direction="settingsStore.settings.app.direction"
+                class="menu"
+                :class="{
+                  '-mt-2': !(isCollapse || ['head', 'single'].includes(settingsStore.settings.menu.mode)),
+                }"
+              />
+            </div>
+          </template>
+        </TransitionGroup>
+      </KpuScrollArea>
+      <div
+        v-if="settingsStore.mode === 'pc' && settingsStore.settings.menu.enableSubMenuCollapseButton" class="relative flex items-center px-4 py-3" :class="{
+          'justify-center': isCollapse,
+          'justify-between': !isCollapse,
+        }"
       >
-        <KpuIcon :name="settingsStore.settings.menu.subMenuAutoCollapse ? 'i-lucide:pin-off' : 'i-lucide:pin'" :size="16" />
-      </KpuButton>
-      <KpuButton
-        variant="secondary"
-        size="icon"
-        class="h-8 w-8 transition"
-        :class="{ '-rotate-z-180': settingsStore.settings.menu.subMenuCollapse }"
-        @click="settingsStore.toggleSidebarCollapse()"
-      >
-        <KpuIcon name="toolbar-collapse" :size="16" />
-      </KpuButton>
+        <KpuButton
+          v-show="!isCollapse"
+          variant="secondary"
+          size="icon"
+          class="h-8 w-8"
+          @click="settingsStore.toggleSidebarAutoCollapse()"
+        >
+          <KpuIcon :name="settingsStore.settings.menu.subMenuAutoCollapse ? 'i-lucide:pin-off' : 'i-lucide:pin'" :size="16" />
+        </KpuButton>
+        <KpuButton
+          variant="secondary"
+          size="icon"
+          class="h-8 w-8 transition"
+          :class="{ '-rotate-z-180': settingsStore.settings.menu.subMenuCollapse }"
+          @click="settingsStore.toggleSidebarCollapse()"
+        >
+          <KpuIcon name="toolbar-collapse" :size="16" />
+        </KpuButton>
+      </div>
+      <component :is="useSlots('sub-sidebar-bottom')" />
     </div>
-    <component :is="useSlots('sub-sidebar-bottom')" />
-  </div>
+  </Transition>
 </template>
 
 <style scoped>
@@ -190,5 +192,16 @@ watch(() => menuStore.actived, (val, oldVal) => {
 .sub-sidebar-y-start-leave-active,
 .sub-sidebar-y-end-leave-active {
   position: absolute;
+}
+
+/* 次侧边栏动画 */
+.sub-sidebar-enter-active,
+.sub-sidebar-leave-active {
+  transition: 0.3s;
+}
+
+.sub-sidebar-enter-from,
+.sub-sidebar-leave-to {
+  transform: translateX(calc(var(--g-sub-sidebar-width) * -1));
 }
 </style>

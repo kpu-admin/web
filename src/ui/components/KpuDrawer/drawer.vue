@@ -27,7 +27,8 @@ const props = withDefaults(defineProps<Props>(), {
   appendToMain: false,
   closeIconPlacement: 'right',
   drawerApi: undefined,
-  zIndex: 2000,
+  submitting: false,
+  zIndex: 1000,
 })
 
 const components = globalShareState.getComponents()
@@ -46,6 +47,7 @@ const {
   cancelText,
   class: drawerClass,
   closable,
+  closeIconPlacement,
   closeOnClickModal,
   closeOnPressEscape,
   confirmLoading,
@@ -63,6 +65,7 @@ const {
   placement,
   showCancelButton,
   showConfirmButton,
+  submitting,
   title,
   titleTooltip,
   zIndex,
@@ -80,12 +83,12 @@ watch(
 )
 
 function interactOutside(e: Event) {
-  if (!closeOnClickModal.value) {
+  if (!closeOnClickModal.value || submitting.value) {
     e.preventDefault()
   }
 }
 function escapeKeyDown(e: KeyboardEvent) {
-  if (!closeOnPressEscape.value) {
+  if (!closeOnPressEscape.value || submitting.value) {
     e.preventDefault()
   }
 }
@@ -93,7 +96,9 @@ function escapeKeyDown(e: KeyboardEvent) {
 function pointerDownOutside(e: Event) {
   const target = e.target as HTMLElement
   const dismissableDrawer = target?.dataset.dismissableDrawer
-  if (!closeOnClickModal.value || dismissableDrawer !== id) {
+  if (submitting.value
+    || !closeOnClickModal.value
+    || dismissableDrawer !== id) {
     e.preventDefault()
   }
 }
@@ -110,7 +115,9 @@ function handleFocusOutside(e: Event) {
 }
 
 const getAppendTo = computed(() => {
-  return appendToMain.value ? `#${ELEMENT_ID_MAIN_CONTENT}` : undefined
+  return appendToMain.value
+    ? `#${ELEMENT_ID_MAIN_CONTENT}>div:not(.smart-fixed-block)>div:not(.exit-main-page-maximize):not(.iframe-view)`
+    : undefined
 })
 </script>
 
@@ -159,6 +166,7 @@ const getAppendTo = computed(() => {
           <SheetClose
             v-if="closable && closeIconPlacement === 'left'"
             as-child
+            :disabled="submitting"
             class="ml-[2px] cursor-pointer rounded-full opacity-80 transition-opacity disabled:pointer-events-none data-[state=open]:bg-secondary hover:opacity-100 focus:outline-none"
           >
             <slot name="close-icon">
@@ -225,8 +233,8 @@ const getAppendTo = computed(() => {
       >
         <!--        <KLoading v-if="showLoading" class="size-full" spinning /> -->
         <div
-          v-if="showLoading"
-          class="absolute inset-0 z-1000 size-full flex-center bg-popover/75"
+          v-if="showLoading || submitting"
+          class="absolute inset-0 z-1000 flex-center bg-popover/75 !size-full"
         >
           <KpuIcon name="i-line-md:loading-twotone-loop" :size="36" />
         </div>
@@ -247,6 +255,7 @@ const getAppendTo = computed(() => {
           <component
             :is="components.DefaultButton || KpuButton"
             v-if="showCancelButton"
+            :disabled="submitting"
             variant="ghost"
             @click="() => drawerApi?.onCancel()"
           >
@@ -258,7 +267,7 @@ const getAppendTo = computed(() => {
           <component
             :is="components.PrimaryButton || KpuButton"
             v-if="showConfirmButton"
-            :loading="confirmLoading"
+            :loading="confirmLoading || submitting"
             @click="() => drawerApi?.onConfirm()"
           >
             <slot name="confirmText">

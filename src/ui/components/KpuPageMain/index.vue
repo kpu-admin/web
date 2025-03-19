@@ -35,7 +35,7 @@ function handleCollaspe() {
       </slot>
     </div>
     <div
-      class="group main-container relative h-[calc-size(auto,size)] p-5 transition-height after:(pointer-events-none absolute bottom-0 left-0 z-1 h-12 max-h-full w-full from-transparent to-[hsl(var(--card))] bg-gradient-to-b opacity-0 transition-opacity content-empty)" :class="{
+      class="main-container group/pagemain relative h-[calc-size(auto,size)] p-5 transition-height after:(pointer-events-none absolute bottom-0 left-0 z-1 h-12 max-h-full w-full from-transparent to-[hsl(var(--card))] bg-gradient-to-b opacity-0 transition-opacity content-empty)" :class="{
         'overflow-hidden': collaspe,
         'after:(opacity-100)': isCollaspe,
       }" :style="{
@@ -43,7 +43,7 @@ function handleCollaspe() {
       }"
     >
       <slot />
-      <KpuButton v-if="collaspe" variant="link" size="icon" class="absolute inset-b-0 inset-s-1/2 opacity-0 transition-all -translate-x-1/2 group-hover-opacity-100" :class="{ 'rotate-x-180': !isCollaspe }" @click="handleCollaspe">
+      <KpuButton v-if="collaspe" variant="link" size="icon" class="group/pagemain-hover-opacity-100 absolute inset-b-0 inset-s-1/2 opacity-0 transition-all -translate-x-1/2" :class="{ 'rotate-x-180': !isCollaspe }" @click="handleCollaspe">
         <KpuIcon name="i-ep:arrow-down" class="text-xl" />
       </KpuButton>
     </div>
