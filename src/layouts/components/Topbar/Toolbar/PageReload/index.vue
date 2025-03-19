@@ -14,8 +14,8 @@ function handleClick() {
 </script>
 
 <template>
-  <KpuButton variant="ghost" size="icon" @click="handleClick" @animationend="isAnimating = false">
-    <KpuIcon name="i-iconoir:refresh-double" :size="16" />
+  <KpuButton variant="ghost" size="icon" class="size-9" @click="handleClick" @animationend="isAnimating = false">
+    <KpuIcon name="i-iconoir:refresh-double" class="size-4" :class="{ animation: isAnimating }" />
   </KpuButton>
 </template>
 

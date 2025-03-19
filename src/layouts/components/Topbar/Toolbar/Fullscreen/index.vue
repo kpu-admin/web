@@ -12,7 +12,7 @@ const { isFullscreen, toggle } = useFullscreen()
 </script>
 
 <template>
-  <KpuButton v-if="settingsStore.mode === 'pc'" variant="ghost" size="icon" @click="toggle">
+  <KpuButton v-if="settingsStore.mode === 'pc'" variant="ghost" size="icon" class="size-9" @click="toggle">
     <KpuIcon :name="isFullscreen ? 'i-ri:fullscreen-exit-line' : 'i-ri:fullscreen-line'" :size="16" />
   </KpuButton>
 </template>

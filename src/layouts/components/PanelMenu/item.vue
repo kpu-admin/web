@@ -34,11 +34,6 @@ const icon = computed(() => {
   return icon
 })
 
-// 缩进样式
-const indentStyle = computed(() => {
-  return `padding-inline-start: ${20 * (props.level ?? 0)}px`
-})
-
 defineExpose({
   ref: itemRef,
 })
@@ -86,10 +81,12 @@ defineExpose({
           }"
         >
           <div
-            class="inline-flex flex-1 items-center justify-center gap-1" :class="{
+            class="inline-flex flex-1 items-center justify-center gap-1 ps-[calc((var(--indent-level)-1)*12px)]" :class="{
               'flex-col': level === 0 && rootMenu.props.mode === 'vertical',
               'w-full': level === 0 && rootMenu.props.showCollapseName && rootMenu.props.mode === 'vertical',
-            }" :style="indentStyle"
+            }" :style="{
+              '--indent-level': props.level ?? 0,
+            }"
           >
             <KpuIcon
               v-if="icon" :name="icon" :size="16" class="menu-item-container-icon"

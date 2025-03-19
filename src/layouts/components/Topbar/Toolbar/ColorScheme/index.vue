@@ -38,7 +38,7 @@ function toggleColorScheme(event: MouseEvent) {
 
 <template>
   <KpuPopover class="min-w-auto flex-center cursor-pointer p-0">
-    <KpuButton variant="ghost" size="icon" @click="toggleColorScheme">
+    <KpuButton variant="ghost" size="icon" class="size-9" @click="toggleColorScheme">
       <KpuIcon
         :name="{
           'light': 'i-ri:sun-line',
