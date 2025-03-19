@@ -6,11 +6,11 @@ import { onMounted } from 'vue'
 import { Codemirror } from 'vue-codemirror'
 
 interface Props {
-  code: string
-  mode: 'java' | 'javascript'
-  theme: 'default' | 'oneDark'
-  config: Record<string, any>
-  placeholder: string
+  code?: string
+  mode?: 'java' | 'javascript'
+  theme?: 'default' | 'oneDark'
+  config?: Record<string, any>
+  placeholder?: string
 }
 
 defineOptions({

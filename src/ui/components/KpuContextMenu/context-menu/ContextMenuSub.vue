@@ -1,8 +1,8 @@
 <script setup lang="ts">
+import type { ContextMenuSubEmits, ContextMenuSubProps } from 'reka-ui'
 import {
   ContextMenuSub,
-  type ContextMenuSubEmits,
-  type ContextMenuSubProps,
+
   useForwardPropsEmits,
 } from 'reka-ui'
 

@@ -1,7 +1,9 @@
 <script setup lang="ts">
+import type { ContextMenuLabelProps } from 'reka-ui'
+import type { HTMLAttributes } from 'vue'
 import { cn } from '@/utils'
-import { ContextMenuLabel, type ContextMenuLabelProps } from 'reka-ui'
-import { computed, type HTMLAttributes } from 'vue'
+import { ContextMenuLabel } from 'reka-ui'
+import { computed } from 'vue'
 
 const props = defineProps<ContextMenuLabelProps & { class?: HTMLAttributes['class'], inset?: boolean }>()
 

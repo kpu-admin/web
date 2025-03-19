@@ -1,14 +1,15 @@
 <script setup lang="ts">
+import type { ContextMenuRadioItemEmits, ContextMenuRadioItemProps } from 'reka-ui'
+import type { HTMLAttributes } from 'vue'
 import { cn } from '@/utils'
 import { Circle } from 'lucide-vue-next'
 import {
   ContextMenuItemIndicator,
   ContextMenuRadioItem,
-  type ContextMenuRadioItemEmits,
-  type ContextMenuRadioItemProps,
+
   useForwardPropsEmits,
 } from 'reka-ui'
-import { computed, type HTMLAttributes } from 'vue'
+import { computed } from 'vue'
 
 const props = defineProps<ContextMenuRadioItemProps & { class?: HTMLAttributes['class'] }>()
 const emits = defineEmits<ContextMenuRadioItemEmits>()

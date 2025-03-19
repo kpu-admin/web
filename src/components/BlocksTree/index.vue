@@ -17,7 +17,7 @@ const emits = defineEmits<{
 }>()
 
 interface Props {
-  treeProps: Record<string, any>
+  treeProps?: Record<string, any>
   data: Record<string, any>
 }
 

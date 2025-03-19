@@ -126,7 +126,7 @@ const formRef = ref()
       </Transition>
     </div>
   </div>
-  <KpuCopyright v-if="settingsStore.mode === 'mobile' || 'center' === layout" class="copyright"  />
+  <KpuCopyright v-if="settingsStore.mode === 'mobile' || 'center' === layout" class="copyright" />
 </template>
 
 <style scoped>

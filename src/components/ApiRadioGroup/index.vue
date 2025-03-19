@@ -28,17 +28,19 @@ const modelValue = computed({
   },
 })
 const dicts = ref<LabelValueOptions>([])
+
 async function getDicts() {
   const res = await props.api(props.params)
   dicts.value = get(res, props.resultField, [])
 }
+
 onMounted(() => {
   if (props.defaultValue && !props.modelValue) {
     modelValue.value = props.defaultValue
   }
   getDicts()
 })
-const slots: Record<string, Function> = useSlots()
+const slots: Record<string, Function | undefined> = useSlots()
 </script>
 
 <template>
