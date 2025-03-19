@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import type { ExtendedFormApi, KpuFormProps } from './types'
-import { useForwardPropsEmits } from 'radix-vue'
+import { useForwardPropsEmits } from 'reka-ui'
 import { ref, watchEffect } from 'vue'
 
 import FormActions from './components/form-actions.vue'

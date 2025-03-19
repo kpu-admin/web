@@ -24,6 +24,7 @@ declare module 'vue' {
     KpuCheckbox: typeof import('./../ui/components/KpuCheckbox/index.vue')['default']
     KpuChip: typeof import('./../ui/components/KpuChip/index.vue')['default']
     KpuContextMenu: typeof import('./../ui/components/KpuContextMenu/index.vue')['default']
+    KpuCopyright: typeof import('./../ui/components/KpuCopyright/index.vue')['default']
     KpuCountTo: typeof import('./../ui/components/KpuCountTo/index.vue')['default']
     KpuDivider: typeof import('./../ui/components/KpuDivider/index.vue')['default']
     KpuDropdown: typeof import('./../ui/components/KpuDropdown/index.vue')['default']

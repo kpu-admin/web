@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import type { ClassType } from '#/index'
 
-import type { DialogContentEmits, DialogContentProps } from 'radix-vue'
+import type { DialogContentEmits, DialogContentProps } from 'reka-ui'
 
 import { cn } from '@/utils'
 
@@ -11,7 +11,7 @@ import {
   DialogContent,
   DialogPortal,
   useForwardPropsEmits,
-} from 'radix-vue'
+} from 'reka-ui'
 
 import { computed, ref } from 'vue'
 import DialogOverlay from './DialogOverlay.vue'

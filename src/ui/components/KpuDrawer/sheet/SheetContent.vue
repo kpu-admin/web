@@ -1,11 +1,11 @@
 <script setup lang="ts">
-import type { DialogContentEmits, DialogContentProps } from 'radix-vue'
+import type { DialogContentEmits, DialogContentProps } from 'reka-ui'
 
 import type { SheetVariants } from './sheet'
 
 import { cn } from '@/utils'
 
-import { DialogContent, DialogPortal, useForwardPropsEmits } from 'radix-vue'
+import { DialogContent, DialogPortal, useForwardPropsEmits } from 'reka-ui'
 
 import { computed, ref } from 'vue'
 

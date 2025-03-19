@@ -7,7 +7,7 @@ import HelpTooltip from '@/ui/components/KpuTooltip/help-tooltip.vue'
 import { cn } from '@/utils'
 import { globalShareState } from '@/utils/global-state'
 import { Expand, Shrink } from 'lucide-vue-next'
-import { VisuallyHidden } from 'radix-vue'
+import { VisuallyHidden } from 'reka-ui'
 
 import { computed, nextTick, provide, ref, useId, watch } from 'vue'
 

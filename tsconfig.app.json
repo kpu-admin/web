@@ -10,16 +10,12 @@
     ],
     "moduleDetection": "force",
     "useDefineForClassFields": true,
-    "baseUrl": "./",
+    "baseUrl": ".",
     "module": "ESNext",
     "moduleResolution": "Bundler",
     "paths": {
-      "@/*": [
-        "src/*"
-      ],
-      "#/*": [
-        "src/types/*"
-      ]
+      "@/*": ["./src/*"],
+      "#/*": ["./src/types/*"]
     },
     "resolveJsonModule": true,
     "types": [

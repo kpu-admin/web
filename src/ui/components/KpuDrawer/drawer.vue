@@ -6,7 +6,7 @@ import KpuHelpTooltip from '@/ui/components/KpuTooltip/help-tooltip.vue'
 import { cn } from '@/utils'
 import { globalShareState } from '@/utils/global-state'
 import { X } from 'lucide-vue-next'
-import { Separator, VisuallyHidden } from 'radix-vue'
+import { Separator, VisuallyHidden } from 'reka-ui'
 import { computed, provide, ref, useId, watch } from 'vue'
 import {
   // Separator,

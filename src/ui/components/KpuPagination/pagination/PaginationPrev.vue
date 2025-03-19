@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import type { PaginationPrevProps } from 'radix-vue'
+import type { PaginationPrevProps } from 'reka-ui'
 
 import { cn } from '@/utils'
 
 import { ChevronLeft } from 'lucide-vue-next'
-import { PaginationPrev } from 'radix-vue'
+import { PaginationPrev } from 'reka-ui'
 import { computed } from 'vue'
 
 const props = withDefaults(

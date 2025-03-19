@@ -9,7 +9,6 @@ import { useTimeoutFn } from '@vueuse/core'
 import hotkeys from 'hotkeys-js'
 import AppSetting from './components/AppSetting/index.vue'
 import BackTop from './components/BackTop/index.vue'
-import Copyright from './components/Copyright/index.vue'
 import Header from './components/Header/index.vue'
 import HotkeysIntro from './components/HotkeysIntro/index.vue'
 // import Preferences from './components/Preferences/index.vue'
@@ -190,14 +189,16 @@ const enableAppSetting = import.meta.env.VITE_APP_SETTING
             <RouterView v-slot="{ Component, route }">
               <Transition :name="settingsStore.settings.mainPage.enableTransition ? settingsStore.settings.mainPage.transitionMode : ''" mode="out-in">
                 <KeepAlive :include="keepAliveStore.list">
-                  <component :is="Component" v-show="!(isIframe || isLink)" :key="route.fullPath" />
+                  <Suspense>
+                    <component :is="Component" v-show="!(isIframe || isLink)" :key="route.fullPath" />
+                  </Suspense>
                 </KeepAlive>
               </Transition>
             </RouterView>
             <IframeView v-show="isIframe && !isLink" />
             <LinkView v-if="isLink" />
           </div>
-          <Copyright />
+          <KpuCopyright />
         </div>
       </div>
     </div>
