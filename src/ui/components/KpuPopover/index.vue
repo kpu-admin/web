@@ -27,7 +27,7 @@ function handleOpenAutoFocus(e: Event) {
 
 <template>
   <Popover>
-    <PopoverTrigger as-child>
+    <PopoverTrigger as="span">
       <slot />
     </PopoverTrigger>
     <PopoverContent :align :align-offset :side :side-offset :collision-padding :class="props.class" @open-auto-focus="handleOpenAutoFocus">

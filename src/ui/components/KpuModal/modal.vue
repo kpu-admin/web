@@ -1,9 +1,8 @@
 <script lang="ts" setup>
 import type { ExtendedModalApi, ModalProps } from './modal'
 import { ELEMENT_ID_MAIN_CONTENT } from '@/enums/globals'
-
 import KpuButton from '@/ui/components/KpuButton/index.vue'
-import HelpTooltip from '@/ui/components/KpuTooltip/help-tooltip.vue'
+import KpuHelpTooltip from '@/ui/components/KpuTooltip/help-tooltip.vue'
 import { cn } from '@/utils'
 import { globalShareState } from '@/utils/global-state'
 import { Expand, Shrink } from 'lucide-vue-next'
@@ -185,7 +184,9 @@ function handleFocusOutside(e: Event) {
   e.stopPropagation()
 }
 const getAppendTo = computed(() => {
-  return appendToMain.value ? `#${ELEMENT_ID_MAIN_CONTENT}` : undefined
+  return appendToMain.value
+    ? `#${ELEMENT_ID_MAIN_CONTENT}>div:not(.smart-fixed-block)>div:not(.exit-main-page-maximize):not(.iframe-view)`
+    : undefined
 })
 </script>
 
@@ -214,10 +215,11 @@ const getAppendTo = computed(() => {
       "
       :modal="modal"
       :open="state?.isOpen"
-      :show-close="submitting ? false : closable"
+      :show-close="closable"
       :z-index="zIndex"
       :overlay-blur="overlayBlur"
       close-class="top-3"
+      :close-disabled="submitting"
       @close-auto-focus="handleFocusOutside"
       @closed="() => modalApi?.onClosed()"
       @escape-key-down="escapeKeyDown"
@@ -249,14 +251,10 @@ const getAppendTo = computed(() => {
           <DialogTitle v-if="title" class="text-left">
             <slot name="title">
               {{ title }}
-
               <slot v-if="titleTooltip" name="titleTooltip">
-                <HelpTooltip trigger-class="pb-1">
+                <KpuHelpTooltip trigger-class="pb-1">
                   {{ titleTooltip }}
-                  <template #trigger>
-                    sss
-                  </template>
-                </HelpTooltip>
+                </KpuHelpTooltip>
               </slot>
             </slot>
           </DialogTitle>

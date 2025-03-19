@@ -121,7 +121,7 @@ header {
   top: 0;
   right: var(--scrollbar-width, 0);
   left: 0;
-  z-index: 2000;
+  z-index: 201;
   display: flex;
   align-items: center;
   width: calc(100% - var(--scrollbar-width, 0px));

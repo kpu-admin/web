@@ -140,7 +140,7 @@ function handleMouseenters() {
     <template v-if="level === 0">
       <Transition v-bind="transitionClass" v-on="transitionEvent">
         <KpuScrollArea
-          v-show="opened" ref="subMenuRef" mask class="sub-menu z-3000 w-150 border rounded-lg bg-[var(--g-sub-sidebar-bg)] shadow-xl fixed! 2xl:w-200"
+          v-show="opened" ref="subMenuRef" mask class="sub-menu z-1000 w-150 border rounded-lg bg-[var(--g-sub-sidebar-bg)] shadow-xl fixed! 2xl:w-200"
           @mouseenter="handleMouseenters"
           @mouseleave="handleMouseleave"
         >

@@ -181,6 +181,8 @@ function contextMenuItems(routeItem: Tabbar.recordRaw) {
           tabbar.closeById(routeItem.tabId)
         },
       },
+    ],
+    [
       {
         label: routeItem.isPin ? $t('app.tabbar.unpin') : $t('app.tabbar.pin'),
         icon: routeItem.isPin ? 'i-lucide:pin-off' : 'i-lucide:pin',
@@ -215,6 +217,8 @@ function contextMenuItems(routeItem: Tabbar.recordRaw) {
           window.open(details.href, '_blank')
         },
       },
+    ],
+    [
       {
         label: $t('app.tabbar.closeOtherSide'),
         disabled: !tabbar.checkCloseOtherSide(routeItem.tabId),

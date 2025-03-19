@@ -32,7 +32,7 @@ function classNames(...args: any[]): string {
 export default classNames
 
 // eslint-disable-next-line import/no-mutable-exports
-export let defaultNamespace = 'y1'
+export let defaultNamespace = 'kpu'
 const statePrefix = 'is-'
 
 export function setDefaultNamespace(val: string) {

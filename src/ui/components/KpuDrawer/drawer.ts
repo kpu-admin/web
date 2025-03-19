@@ -105,6 +105,10 @@ export interface DrawerProps {
    */
   showConfirmButton?: boolean
   /**
+   * 提交中（锁定抽屉状态）
+   */
+  submitting?: boolean
+  /**
    * 弹窗标题
    */
   title?: string
