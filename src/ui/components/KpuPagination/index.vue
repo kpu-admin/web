@@ -7,7 +7,7 @@ defineOptions({
 
 defineProps<{
   // page?: number
-  size?: number
+  size: number
   total?: number
 }>()
 // pageChange

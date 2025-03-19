@@ -14,7 +14,7 @@ import hotkeys from 'hotkeys-js'
 import { match } from 'pinyin-pro'
 
 defineOptions({
-  name: 'Search',
+  name: 'NavSearch',
 })
 
 const router = useRouter()

@@ -1,8 +1,9 @@
 import type { Route } from '#/global'
+import type { RouteRecordRaw, RouterMatcher } from 'vue-router'
 import { requestClient } from '@/api'
 import { systemRoutes as systemRoutesRaw } from '@/router/routes'
 import { cloneDeep } from 'es-toolkit'
-import { createRouterMatcher, type RouteRecordRaw, type RouterMatcher } from 'vue-router'
+import { createRouterMatcher } from 'vue-router'
 import useSettingsStore from './settings'
 import useTabbarStore from './tabbar'
 
