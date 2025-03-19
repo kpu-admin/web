@@ -5,7 +5,7 @@ import type { ZodRawShape } from 'zod'
 import type { ExtendedFormApi, FormActions, KpuFormProps } from './types'
 
 import { isString } from '@/utils'
-import { createContext } from 'radix-vue'
+import { createContext } from 'reka-ui'
 
 import { useForm } from 'vee-validate'
 import { computed, unref, useSlots } from 'vue'

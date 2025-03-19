@@ -34,7 +34,7 @@ const selectedOption = computed({
 </script>
 
 <template>
-  <Select v-model:model-value="value" :disabled>
+  <Select v-model="value" :disabled>
     <SelectTrigger class="w-[200px]">
       <SelectValue :placeholder="selectedOption.label" />
     </SelectTrigger>

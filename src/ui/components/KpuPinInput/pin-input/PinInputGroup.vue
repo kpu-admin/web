@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { cn } from '@/utils'
-import { Primitive, type PrimitiveProps, useForwardProps } from 'radix-vue'
+import { Primitive, type PrimitiveProps, useForwardProps } from 'reka-ui'
 import { computed, type HTMLAttributes } from 'vue'
 
 const props = defineProps<PrimitiveProps & { class?: HTMLAttributes['class'] }>()

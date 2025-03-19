@@ -1,5 +1,4 @@
 <script setup lang="ts">
-import Copyright from '@/layouts/components/Copyright/index.vue'
 import ColorScheme from '@/layouts/components/Topbar/Toolbar/ColorScheme/index.vue'
 import I18n from '@/layouts/components/Topbar/Toolbar/I18n/index.vue'
 import useSettingsStore from '@/store/modules/settings.ts'
@@ -127,7 +126,7 @@ const formRef = ref()
       </Transition>
     </div>
   </div>
-  <Copyright v-if="settingsStore.mode === 'mobile' || 'center' === layout" />
+  <KpuCopyright v-if="settingsStore.mode === 'mobile' || 'center' === layout" class="copyright"  />
 </template>
 
 <style scoped>
