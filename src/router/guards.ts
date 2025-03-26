@@ -51,49 +51,55 @@ function setupRoutes(router: Router) {
         }
       }
       else {
-        // 获取用户权限
-        settingsStore.settings.app.enablePermission && await userStore.getPermissions()
-        // 获取用户偏好设置
-        settingsStore.settings.userPreferences.enable && await userStore.getPreferences()
-        // 复原固定标签页
-        settingsStore.settings.tabbar.enable && await tabbarStore.recoveryStorage()
-        // 复原收藏夹
-        settingsStore.settings.toolbar.favorites && await favoritesStore.recoveryStorage()
-        // 生成动态路由
-        switch (settingsStore.settings.app.routeBaseOn) {
-          case 'frontend':
-            routeStore.generateRoutesAtFront(asyncRoutes)
-            break
-          case 'backend':
-            await routeStore.generateRoutesAtBack()
-            break
-          case 'filesystem':
-            routeStore.generateRoutesAtFilesystem(asyncRoutesByFilesystem)
-            // 文件系统生成的路由，需要手动生成导航数据
-            switch (settingsStore.settings.menu.baseOn) {
-              case 'frontend':
-                menuStore.generateMenusAtFront()
-                break
-              case 'backend':
-                await menuStore.generateMenusAtBack()
-                break
-            }
-            break
-        }
-        // 注册并记录路由数据
-        // 记录的数据会在登出时会使用到，不使用 router.removeRoute 是考虑配置的路由可能不一定有设置 name ，则通过调用 router.addRoute() 返回的回调进行删除
-        const removeRoutes: (() => void)[] = []
-        routeStore.routes.forEach((route) => {
-          if (!/^(?:https?:|mailto:|tel:)/.test(route.path)) {
-            removeRoutes.push(router.addRoute(route as RouteRecordRaw))
+        try {
+          // 获取用户权限
+          settingsStore.settings.app.enablePermission && await userStore.getPermissions()
+
+          // 获取用户偏好设置
+          settingsStore.settings.userPreferences.enable && await userStore.getPreferences()
+          // 复原固定标签页
+          settingsStore.settings.tabbar.enable && await tabbarStore.recoveryStorage()
+          // 复原收藏夹
+          settingsStore.settings.toolbar.favorites && await favoritesStore.recoveryStorage()
+          // 生成动态路由
+          switch (settingsStore.settings.app.routeBaseOn) {
+            case 'frontend':
+              routeStore.generateRoutesAtFront(asyncRoutes)
+              break
+            case 'backend':
+              await routeStore.generateRoutesAtBack()
+              break
+            case 'filesystem':
+              routeStore.generateRoutesAtFilesystem(asyncRoutesByFilesystem)
+              // 文件系统生成的路由，需要手动生成导航数据
+              switch (settingsStore.settings.menu.baseOn) {
+                case 'frontend':
+                  menuStore.generateMenusAtFront()
+                  break
+                case 'backend':
+                  await menuStore.generateMenusAtBack()
+                  break
+              }
+              break
           }
-        })
-        if (settingsStore.settings.app.routeBaseOn !== 'filesystem') {
-          routeStore.systemRoutes.forEach((route) => {
-            removeRoutes.push(router.addRoute(route as RouteRecordRaw))
+          // 注册并记录路由数据
+          // 记录的数据会在登出时会使用到，不使用 router.removeRoute 是考虑配置的路由可能不一定有设置 name ，则通过调用 router.addRoute() 返回的回调进行删除
+          const removeRoutes: (() => void)[] = []
+          routeStore.routes.forEach((route) => {
+            if (!/^(?:https?:|mailto:|tel:)/.test(route.path)) {
+              removeRoutes.push(router.addRoute(route as RouteRecordRaw))
+            }
           })
+          if (settingsStore.settings.app.routeBaseOn !== 'filesystem') {
+            routeStore.systemRoutes.forEach((route) => {
+              removeRoutes.push(router.addRoute(route as RouteRecordRaw))
+            })
+          }
+          routeStore.setCurrentRemoveRoutes(removeRoutes)
         }
-        routeStore.setCurrentRemoveRoutes(removeRoutes)
+        catch {
+          userStore.logout()
+        }
         // 动态路由生成并注册后，重新进入当前路由
         next({
           path: to.path,

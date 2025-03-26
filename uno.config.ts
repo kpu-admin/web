@@ -13,7 +13,6 @@ import {
   transformerVariantGroup,
 } from 'unocss'
 import { presetAnimations } from 'unocss-preset-animations'
-import { presetScrollbar } from 'unocss-preset-scrollbar'
 import themes from './themes'
 
 export default defineConfig<Theme>({
@@ -120,7 +119,6 @@ export default defineConfig<Theme>({
       },
     }),
     presetTypography(),
-    presetScrollbar(),
     presetLegacyCompat({
       legacyColorSpace: true,
     }) as PresetOrFactoryAwaitable<Theme>,

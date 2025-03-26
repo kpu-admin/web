@@ -375,9 +375,6 @@ importers:
       unocss-preset-animations:
         specifier: ^1.1.1
         version: 1.1.1(@unocss/preset-wind@65.5.0)(unocss@65.5.0(postcss@8.5.3)(vite@6.2.2(@types/node@22.13.10)(jiti@2.4.2)(sass-embedded@1.86.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2)))
-      unocss-preset-scrollbar:
-        specifier: ^3.2.0
-        version: 3.2.0(unocss@65.5.0(postcss@8.5.3)(vite@6.2.2(@types/node@22.13.10)(jiti@2.4.2)(sass-embedded@1.86.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2)))
       unplugin-auto-import:
         specifier: ^19.1.1
         version: 19.1.1(@nuxt/kit@3.16.0)(@vueuse/core@13.0.0(vue@3.5.13(typescript@5.8.2)))
@@ -1813,25 +1810,21 @@ packages:
     resolution: {integrity: sha512-g9FUS++WwVJmrsZHS3vi7mlLQYHKL/tbX7H8ERlQhLp01JzD3zyyHzieVqeClV7B+nQSctyurpwmYuOD4grZPw==}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@oxc-parser/binding-linux-arm64-musl@0.48.2':
     resolution: {integrity: sha512-r5S+2IRW8QCL8eSv1gzp/nMTt1WbS04etm5mvM/55SH2G6bXJ8MNfcj3KATjmD/JvfNvsDVB80VlwI6HUNX+WQ==}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@oxc-parser/binding-linux-x64-gnu@0.48.2':
     resolution: {integrity: sha512-f10drS9TBekdHh37TSWYSGLgKBAofC7zuRjnTTuH1sXWTxRzmshs8p4WNVYcqImfgix48o3H0uwIFNm/UsSkfA==}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@oxc-parser/binding-linux-x64-musl@0.48.2':
     resolution: {integrity: sha512-rUAOgodK1wW++RO2xBjvXJtALVyKbXDkaiG61Ob5+f9M4gfD6kfci2cqOT4dD5z2+zxB4dC71DaaOdwM20Yx9Q==}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@oxc-parser/binding-win32-arm64-msvc@0.48.2':
     resolution: {integrity: sha512-xHMx56Xd0gXp3nwrIJ8Z6Hny2Mvj5jSAUUkd8cYakItA7LNGWYl3EeFKErRXh/Qyd9uhuB4BqSr0CjiMU40vsg==}
@@ -1895,28 +1888,24 @@ packages:
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@resvg/resvg-js-linux-arm64-musl@2.4.1':
     resolution: {integrity: sha512-6mT0+JBCsermKMdi/O2mMk3m7SqOjwi9TKAwSngRZ/nQoL3Z0Z5zV+572ztgbWr0GODB422uD8e9R9zzz38dRQ==}
     engines: {node: '>= 10'}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@resvg/resvg-js-linux-x64-gnu@2.4.1':
     resolution: {integrity: sha512-60KnrscLj6VGhkYOJEmmzPlqqfcw1keDh6U+vMcNDjPhV3B5vRSkpP/D/a8sfokyeh4VEacPSYkWGezvzS2/mg==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@resvg/resvg-js-linux-x64-musl@2.4.1':
     resolution: {integrity: sha512-0AMyZSICC1D7ge115cOZQW8Pcad6PjWuZkBFF3FJuSxC6Dgok0MQnLTs2MfMdKBlAcwO9dXsf3bv9tJZj8pATA==}
     engines: {node: '>= 10'}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@resvg/resvg-js-win32-arm64-msvc@2.4.1':
     resolution: {integrity: sha512-76XDFOFSa3d0QotmcNyChh2xHwk+JTFiEQBVxMlHpHMeq7hNrQJ1IpE1zcHSQvrckvkdfLboKRrlGB86B10Qjw==}
@@ -1983,61 +1972,51 @@ packages:
     resolution: {integrity: sha512-bvXVU42mOVcF4le6XSjscdXjqx8okv4n5vmwgzcmtvFdifQ5U4dXFYaCB87namDRKlUL9ybVtLQ9ztnawaSzvg==}
     cpu: [arm]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-arm-musleabihf@4.36.0':
     resolution: {integrity: sha512-JFIQrDJYrxOnyDQGYkqnNBtjDwTgbasdbUiQvcU8JmGDfValfH1lNpng+4FWlhaVIR4KPkeddYjsVVbmJYvDcg==}
     cpu: [arm]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-arm64-gnu@4.36.0':
     resolution: {integrity: sha512-KqjYVh3oM1bj//5X7k79PSCZ6CvaVzb7Qs7VMWS+SlWB5M8p3FqufLP9VNp4CazJ0CsPDLwVD9r3vX7Ci4J56A==}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-arm64-musl@4.36.0':
     resolution: {integrity: sha512-QiGnhScND+mAAtfHqeT+cB1S9yFnNQ/EwCg5yE3MzoaZZnIV0RV9O5alJAoJKX/sBONVKeZdMfO8QSaWEygMhw==}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-linux-loongarch64-gnu@4.36.0':
     resolution: {integrity: sha512-1ZPyEDWF8phd4FQtTzMh8FQwqzvIjLsl6/84gzUxnMNFBtExBtpL51H67mV9xipuxl1AEAerRBgBwFNpkw8+Lg==}
     cpu: [loong64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-powerpc64le-gnu@4.36.0':
     resolution: {integrity: sha512-VMPMEIUpPFKpPI9GZMhJrtu8rxnp6mJR3ZzQPykq4xc2GmdHj3Q4cA+7avMyegXy4n1v+Qynr9fR88BmyO74tg==}
     cpu: [ppc64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-riscv64-gnu@4.36.0':
     resolution: {integrity: sha512-ttE6ayb/kHwNRJGYLpuAvB7SMtOeQnVXEIpMtAvx3kepFQeowVED0n1K9nAdraHUPJ5hydEMxBpIR7o4nrm8uA==}
     cpu: [riscv64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-s390x-gnu@4.36.0':
     resolution: {integrity: sha512-4a5gf2jpS0AIe7uBjxDeUMNcFmaRTbNv7NxI5xOCs4lhzsVyGR/0qBXduPnoWf6dGC365saTiwag8hP1imTgag==}
     cpu: [s390x]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-x64-gnu@4.36.0':
     resolution: {integrity: sha512-5KtoW8UWmwFKQ96aQL3LlRXX16IMwyzMq/jSSVIIyAANiE1doaQsx/KRyhAvpHlPjPiSU/AYX/8m+lQ9VToxFQ==}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@rollup/rollup-linux-x64-musl@4.36.0':
     resolution: {integrity: sha512-sycrYZPrv2ag4OCvaN5js+f01eoZ2U+RmT5as8vhxiFz+kxwlHrsxOwKPSA8WyS+Wc6Epid9QeI/IkQ9NkgYyQ==}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@rollup/rollup-win32-arm64-msvc@4.36.0':
     resolution: {integrity: sha512-qbqt4N7tokFwwSVlWDsjfoHgviS3n/vZ8LK0h1uLG9TYIRuUTJC88E1xb3LM2iqZ/WTqNQjYrtmtGmrmmawB6A==}
@@ -2406,25 +2385,21 @@ packages:
     resolution: {integrity: sha512-fp4Azi8kHz6TX8SFmKfyScZrMLfp++uRm2srpqRjsRZIIBzH74NtSkdEUHImR4G7f7XJ+sVZjCc6KDDK04YEpQ==}
     cpu: [arm64]
     os: [linux]
-    libc: [glibc]
 
   '@unrs/rspack-resolver-binding-linux-arm64-musl@1.2.2':
     resolution: {integrity: sha512-gMiG3DCFioJxdGBzhlL86KcFgt9HGz0iDhw0YVYPsShItpN5pqIkNrI+L/Q/0gfDiGrfcE0X3VANSYIPmqEAlQ==}
     cpu: [arm64]
     os: [linux]
-    libc: [musl]
 
   '@unrs/rspack-resolver-binding-linux-x64-gnu@1.2.2':
     resolution: {integrity: sha512-n/4n2CxaUF9tcaJxEaZm+lqvaw2gflfWQ1R9I7WQgYkKEKbRKbpG/R3hopYdUmLSRI4xaW1Cy0Bz40eS2Yi4Sw==}
     cpu: [x64]
     os: [linux]
-    libc: [glibc]
 
   '@unrs/rspack-resolver-binding-linux-x64-musl@1.2.2':
     resolution: {integrity: sha512-cHyhAr6rlYYbon1L2Ag449YCj3p6XMfcYTP0AQX+KkQo025d1y/VFtPWvjMhuEsE2lLvtHm7GdJozj6BOMtzVg==}
     cpu: [x64]
     os: [linux]
-    libc: [musl]
 
   '@unrs/rspack-resolver-binding-wasm32-wasi@1.2.2':
     resolution: {integrity: sha512-eogDKuICghDLGc32FtP+WniG38IB1RcGOGz0G3z8406dUdjJvxfHGuGs/dSlM9YEp/v0lEqhJ4mBu6X2nL9pog==}
@@ -6803,11 +6778,6 @@ packages:
     peerDependencies:
       '@unocss/preset-wind': '>=0.56.0 < 101'
       unocss: '>=0.56.0 < 101'
-
-  unocss-preset-scrollbar@3.2.0:
-    resolution: {integrity: sha512-j8BOoh2RgPm2U8XqEjMQ+XQk4YWYPH4T+yzv3fndxS+VpdizQinMvHmfsZGLN3yMv7I4O5Qi8fVTlQDhETyzbA==}
-    peerDependencies:
-      unocss: '>= 0.31.13'
 
   unocss@65.5.0:
     resolution: {integrity: sha512-dLTW89YK+5KCcB3vG/wxiwdpejkLLmZlK9hjWmP52sdeUFcmywc+/khD2/nid7or8dL3YCv1gwoyvnA7JRCwjA==}
@@ -14821,11 +14791,6 @@ snapshots:
   unocss-preset-animations@1.1.1(@unocss/preset-wind@65.5.0)(unocss@65.5.0(postcss@8.5.3)(vite@6.2.2(@types/node@22.13.10)(jiti@2.4.2)(sass-embedded@1.86.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))):
     dependencies:
       '@unocss/preset-wind': 65.5.0
-      unocss: 65.5.0(postcss@8.5.3)(vite@6.2.2(@types/node@22.13.10)(jiti@2.4.2)(sass-embedded@1.86.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
-
-  unocss-preset-scrollbar@3.2.0(unocss@65.5.0(postcss@8.5.3)(vite@6.2.2(@types/node@22.13.10)(jiti@2.4.2)(sass-embedded@1.86.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))):
-    dependencies:
-      '@unocss/preset-mini': 65.5.0
       unocss: 65.5.0(postcss@8.5.3)(vite@6.2.2(@types/node@22.13.10)(jiti@2.4.2)(sass-embedded@1.86.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2))
 
   unocss@65.5.0(postcss@8.5.3)(vite@6.2.2(@types/node@22.13.10)(jiti@2.4.2)(sass-embedded@1.86.0)(terser@5.39.0)(tsx@4.19.3)(yaml@2.7.0))(vue@3.5.13(typescript@5.8.2)):
