@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { SubMenuProps } from './types'
+import { cn } from '@/utils'
 import { useTimeoutFn } from '@vueuse/core'
 import Item from './item.vue'
 import { rootMenuInjectionKey } from './types'
@@ -35,8 +36,7 @@ const transitionEvent = computed(() => {
             el.style.height = `${window.innerHeight}px`
           }
         },
-        afterEnter: () => {
-        },
+        afterEnter: () => {},
         beforeLeave: (el: HTMLElement) => {
           el.style.maxHeight = `${el.offsetHeight}px`
           el.style.overflow = 'hidden'
@@ -49,40 +49,42 @@ const transitionEvent = computed(() => {
           el.style.overflow = ''
         },
       }
-    : {
-        enter(el: HTMLElement) {
-          requestAnimationFrame(() => {
-            el.dataset.height = el.offsetHeight.toString()
-            el.style.maxHeight = '0'
-            void el.offsetHeight
-            el.style.maxHeight = `${el.dataset.height}px`
+    : CSS.supports('height', 'calc-size(auto, size)')
+      ? {}
+      : {
+          enter(el: HTMLElement) {
+            requestAnimationFrame(() => {
+              el.dataset.height = el.offsetHeight.toString()
+              el.style.maxHeight = '0'
+              void el.offsetHeight
+              el.style.maxHeight = `${el.dataset.height}px`
+              el.style.overflow = 'hidden'
+            })
+          },
+          afterEnter(el: HTMLElement) {
+            el.style.maxHeight = ''
+            el.style.overflow = ''
+          },
+          enterCancelled(el: HTMLElement) {
+            el.style.maxHeight = ''
+            el.style.overflow = ''
+          },
+          beforeLeave(el: HTMLElement) {
+            el.style.maxHeight = `${el.offsetHeight}px`
             el.style.overflow = 'hidden'
-          })
-        },
-        afterEnter(el: HTMLElement) {
-          el.style.maxHeight = ''
-          el.style.overflow = ''
-        },
-        enterCancelled(el: HTMLElement) {
-          el.style.maxHeight = ''
-          el.style.overflow = ''
-        },
-        beforeLeave(el: HTMLElement) {
-          el.style.maxHeight = `${el.offsetHeight}px`
-          el.style.overflow = 'hidden'
-        },
-        leave(el: HTMLElement) {
-          el.style.maxHeight = '0'
-        },
-        afterLeave(el: HTMLElement) {
-          el.style.maxHeight = ''
-          el.style.overflow = ''
-        },
-        leaveCancelled(el: HTMLElement) {
-          el.style.maxHeight = ''
-          el.style.overflow = ''
-        },
-      }
+          },
+          leave(el: HTMLElement) {
+            el.style.maxHeight = '0'
+          },
+          afterLeave(el: HTMLElement) {
+            el.style.maxHeight = ''
+            el.style.overflow = ''
+          },
+          leaveCancelled(el: HTMLElement) {
+            el.style.maxHeight = ''
+            el.style.overflow = ''
+          },
+        }
 })
 
 const transitionClass = computed(() => {
@@ -97,11 +99,11 @@ const transitionClass = computed(() => {
       }
     : {
         enterActiveClass: 'ease-in-out duration-300',
-        enterFromClass: 'opacity-0 translate-y-4 scale-95 blur-4',
+        enterFromClass: cn('opacity-0 translate-y-4 scale-95 blur-4', CSS.supports('height', 'calc-size(auto, size)') && 'h-0'),
         enterToClass: 'opacity-100 translate-y-0 scale-100 blur-0',
         leaveActiveClass: 'ease-in-out duration-300',
         leaveFromClass: 'opacity-100 translate-y-0 scale-100 blur-0',
-        leaveToClass: 'opacity-0 translate-y-4 scale-95 blur-4',
+        leaveToClass: cn('opacity-0 translate-y-4 scale-95 blur-4', CSS.supports('height', 'calc-size(auto, size)') && 'h-0'),
       }
 })
 
@@ -147,7 +149,7 @@ function handleMouseenter() {
           top = el.getBoundingClientRect().top + el.scrollTop
           left = (rootMenu.props.direction === 'ltr' ? el.getBoundingClientRect().left : document.documentElement.clientWidth - el.getBoundingClientRect().right) + el.getBoundingClientRect().width
           if (top + subMenuEl.offsetHeight > window.innerHeight) {
-            top = window.innerHeight - subMenuEl.offsetHeight
+            top = Math.max(0, window.innerHeight - subMenuEl.offsetHeight)
           }
         }
         else {
@@ -199,7 +201,7 @@ function handleMouseleave() {
   <Teleport v-if="hasChildren" to="body" :disabled="!rootMenu.isMenuPopup">
     <Transition v-bind="transitionClass" v-on="transitionEvent">
       <KpuScrollArea
-        v-if="opened" ref="subMenuRef" :scrollbar="false" :mask="rootMenu.isMenuPopup" class="sub-menu static rounded-lg"
+        v-if="opened" ref="subMenuRef" :scrollbar="false" :mask="rootMenu.isMenuPopup" class="sub-menu static h-[calc-size(auto,size)] rounded-lg"
         :class="{
           'bg-[var(--g-sub-sidebar-bg)]': rootMenu.isMenuPopup,
           'border shadow-xl fixed! z-1000 w-[200px]': rootMenu.isMenuPopup,

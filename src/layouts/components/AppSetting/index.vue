@@ -27,6 +27,14 @@ const themeList = computed(() => {
     }
   })
 })
+const appRadius = computed<number[]>({
+  get() {
+    return [settingsStore.settings.app.radius]
+  },
+  set(value) {
+    settingsStore.settings.app.radius = value[0]
+  },
+})
 
 watch(() => settingsStore.settings.menu.mode, (value) => {
   if (value === 'single') {
@@ -110,19 +118,20 @@ function handleCopy() {
         <div class="label">
           圆角系数
         </div>
-        <div class="flex-center-start gap-1">
-          <KpuButton
-            v-for="(item, index) in [
-              { label: 0, value: 0 },
-              { label: 0.25, value: 0.25 },
-              { label: 0.5, value: 0.5 },
-              { label: 0.75, value: 0.75 },
-              { label: 1, value: 1 },
-            ]" :key="index" :variant="settingsStore.settings.app.radius === item.value ? 'default' : 'outline'" size="sm" class="w-12" @click="settingsStore.settings.app.radius = (item.value as any)"
-          >
-            {{ item.label }}
-          </KpuButton>
-        </div>
+        <!--        <div class="flex-center-start gap-1"> -->
+        <!--          <KpuButton -->
+        <!--            v-for="(item, index) in [ -->
+        <!--              { label: 0, value: 0 }, -->
+        <!--              { label: 0.25, value: 0.25 }, -->
+        <!--              { label: 0.5, value: 0.5 }, -->
+        <!--              { label: 0.75, value: 0.75 }, -->
+        <!--              { label: 1, value: 1 }, -->
+        <!--            ]" :key="index" :variant="settingsStore.settings.app.radius === item.value ? 'default' : 'outline'" size="sm" class="w-12" @click="settingsStore.settings.app.radius = (item.value as any)" -->
+        <!--          > -->
+        <!--            {{ item.label }} -->
+        <!--          </KpuButton> -->
+        <!--        </div> -->
+        <KpuSlider v-model="appRadius" :min="0" :max="1" :step="0.25" class="w-1/2" />
       </div>
     </div>
     <div v-if="settingsStore.mode === 'pc'">

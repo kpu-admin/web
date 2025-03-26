@@ -50,6 +50,7 @@ declare module 'vue' {
     KpuScrollArea: typeof import('./../ui/components/KpuScrollArea/index.vue')['default']
     KpuSearchBar: typeof import('./../ui/components/KpuSearchBar/index.vue')['default']
     KpuSelect: typeof import('./../ui/components/KpuSelect/index.vue')['default']
+    KpuSlider: typeof import('./../ui/components/KpuSlider/index.vue')['default']
     KpuSmartFixedBlock: typeof import('./../ui/components/KpuSmartFixedBlock/index.vue')['default']
     KpuSparkline: typeof import('./../ui/components/KpuSparkline/index.vue')['default']
     KpuSpinner: typeof import('./../ui/components/KpuSpinner/index.vue')['default']
