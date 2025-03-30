@@ -9,9 +9,10 @@
   "password": "password",
   "profile": "Profile",
   "preferences": "Preferences",
-
   "currentAccount": "Current Login Account",
   "sendCaptcha": "send captcha",
+  "checkUpdatesTitle": "New Version Available",
+  "checkUpdatesDescription": "Click to refresh and get the latest version",
   "route": {
     "home": "Home"
   },
@@ -31,6 +32,7 @@
     "unpin": "Unpin",
     "maximize": "Maximize",
     "newWindow": "Open In New Window",
+    "searchPlaceholder": "Search...",
     "searchTabs": "Search Tabs",
     "closeOtherSide": "Close Otherside Tabs",
     "closeLeftSide": "Close Leftside Tabs",

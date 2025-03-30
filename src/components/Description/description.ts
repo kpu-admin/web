@@ -1,4 +1,4 @@
-import type { KpuFormProps } from '@/ui/form-ui'
+import type { KpuFormProps } from '@/adapter/form'
 import type { DescriptionProps } from './typing.ts'
 import { isFunction } from '@/utils'
 

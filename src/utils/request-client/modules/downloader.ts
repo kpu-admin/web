@@ -33,7 +33,7 @@ class FileDownloader {
       responseType: 'blob',
     }
 
-    const response = await this.client.get<T>(url, finalConfig)
+    const response = await this.client.request<T>(url, finalConfig)
 
     return response
   }

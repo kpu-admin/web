@@ -14,8 +14,8 @@ export const Api = {
       method: RequestEnum.GET,
     }
   },
-  FindEnumListByType: {
-    url: `${ServicePrefix}/anyTenant/enums/findEnumListByType`,
+  FindEnumMapByType: {
+    url: `${ServicePrefix}/anyTenant/enums/findEnumMapByType`,
     method: RequestEnum.POST,
   },
   FindCodeListByType: {
@@ -35,8 +35,14 @@ export function findSystemApi(serviceProfix: string) {
 /**
  * @description: Get 蜜桔
  */
-export function findEnumListByType(params: CodeQueryVO[] = []) {
-  return requestClient.post<OptionsGetResultModel>(Api.FindEnumListByType.url, params)
+export function findEnumByType(params: CodeQueryVO) {
+  return requestClient.post<OptionsGetResultModel>(`${ServicePrefix}/anyTenant/enums/findEnumByType`, params)
+}
+/**
+ * @description: Get 蜜桔
+ */
+export function findEnumMapByType(params: CodeQueryVO[] = []) {
+  return requestClient.post<OptionsGetResultModel>(Api.FindEnumMapByType.url, params)
 }
 
 /**
@@ -105,7 +111,7 @@ const enumTimeDelayReq = new TimeDelayReq({
   },
   // 实现批量请求
   async api(paramList: any[], cacheKey) {
-    const data = await findEnumListByType(paramList)
+    const data = await findEnumMapByType(paramList)
     const resultMap: Map<string, DelayResult> = new Map<string, DelayResult>()
     paramList.forEach((param: any) => {
       const key = cacheKey(param)

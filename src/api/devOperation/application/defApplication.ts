@@ -57,21 +57,21 @@ export const Api = {
 }
 
 export function pageFindMyApplication(params: PageParams<DefApplicationPageQuery>) {
-  return requestClient.get<DefApplicationResultVO[]>(Api.FindMyApplication.url as string, {
+  return requestClient.get<DefApplicationResultVO[]>(`${ServicePrefix}/anyone/findMyApplication`, {
     params: { name: params?.model?.name },
   })
 }
 
 export function findApplicationResourceList() {
-  return requestClient.get<ApplicationResourceResultVO[]>(Api.FindApplicationResourceList.url as string)
+  return requestClient.get<ApplicationResourceResultVO[]>(`${ServicePrefix}/${MODULAR}/findApplicationResourceList`)
 }
 
 export function findAvailableApplicationResourceList() {
-  return requestClient.get<ApplicationResourceResultVO[]>(Api.FindAvailableApplicationResourceList as string)
+  return requestClient.get<ApplicationResourceResultVO[]>(`${ServicePrefix}/${MODULAR}/findAvailableApplicationResourceList`)
 }
 
 export function findAvailableApplicationDataScopeList() {
-  return requestClient.get<ApplicationResourceResultVO[]>(Api.FindAvailableApplicationDataScopeList as string)
+  return requestClient.get<ApplicationResourceResultVO[]>(`${ServicePrefix}/${MODULAR}/findAvailableApplicationDataScopeList`)
 }
 
 export function page(params: PageParams<DefApplicationPageQuery>) {

@@ -29,11 +29,11 @@ const countConfig = ref({
 
 <template>
   <div class="m-4">
-    <ElRow :gutter="20">
-      <ElCol>
+    <ARow :gutter="20">
+      <ACol :lg="24" :md="24" :sm="24" :xl="24" :xs="24">
         <PageHeader mb-5 />
-      </ElCol>
-      <ElCol :lg="6" :md="12" :sm="24" :xl="6" :xs="24">
+      </ACol>
+      <ACol :lg="6" :md="12" :sm="24" :xl="6" :xs="24">
         <TopCard
           background="blue"
           :count-config="countConfig"
@@ -41,31 +41,101 @@ const countConfig = ref({
           percentage="10%"
           title="总销量"
         />
-      </ElCol>
-      <ElCol :lg="6" :md="12" :sm="24" :xl="6" :xs="24">
+      </ACol>
+      <ACol :lg="6" :md="12" :sm="24" :xl="6" :xs="24">
         <TopCard background="white" percentage="30%" title="活跃用户">
           <template #tag>
-            <ElTag type="danger">
+            <ATag type="danger">
               日
-            </ElTag>
+            </ATag>
           </template>
           <template #chart>
             <ActiveUsersBar />
           </template>
         </TopCard>
-      </ElCol>
-      <ElCol :lg="6" :md="12" :sm="24" :xl="6" :xs="24">
+      </ACol>
+      <ACol :lg="6" :md="12" :sm="24" :xl="6" :xs="24">
         <TopCard background="white" percentage="44%" title="总成交" icon="ri:money-cny-box-line" />
-      </ElCol>
-      <ElCol :lg="6" :md="12" :sm="24" :xl="6" :xs="24">
+      </ACol>
+      <ACol :lg="6" :md="12" :sm="24" :xl="6" :xs="24">
         <TopCard background="white" percentage="10%" title="订单" icon="ri:passport-line" />
-      </ElCol>
-      <ElCol :lg="12" :md="24" :sm="24" :xl="12" :xs="24">
+      </ACol>
+      <ACol :lg="12" :md="24" :sm="24" :xl="12" :xs="24">
         <Pending />
-      </ElCol>
-      <ElCol :lg="24" :md="24" :sm="24" :xl="24" :xs="24">
+      </ACol>
+      <ACol :lg="24" :md="24" :sm="24" :xl="24" :xs="24">
         <Recommendation />
-      </elcol>
-    </ElRow>
+      </ACol>
+    </ARow>
+    <!--    测试 rem-to-px-converter -->
+    <!--    <div class="columns has-text-centered flex text-center"> -->
+    <!--      <div class="column"> -->
+    <!--        <p class="heading text-primary"> -->
+    <!--          EM -->
+    <!--        </p> <p id="emPreview" class="title" style="font-size: 1em;"> -->
+    <!--          Hello -->
+    <!--        </p> -->
+    <!--      </div> <div class="column"> -->
+    <!--        <p class="heading text-lightblue"> -->
+    <!--          REM -->
+    <!--        </p> <p id="remPreview" class="title" style="font-size: 1rem;"> -->
+    <!--          Hello -->
+    <!--        </p> -->
+    <!--      </div> <div class="column"> -->
+    <!--        <p class="heading text-green"> -->
+    <!--          Pixel -->
+    <!--        </p> <p id="pixelPreview" class="title" style="font-size: 16px;"> -->
+    <!--          Hello -->
+    <!--        </p> -->
+    <!--      </div> <div class="column"> -->
+    <!--        <p class="heading text-yellow"> -->
+    <!--          Percent -->
+    <!--        </p> <p id="percentPreview" class="title" style="font-size: 100%;"> -->
+    <!--          Hello -->
+    <!--        </p> -->
+    <!--      </div> <div class="column"> -->
+    <!--        <p class="heading text-blue"> -->
+    <!--          Point -->
+    <!--        </p> <p id="pointPreview" class="title" style="font-size: 12pt;"> -->
+    <!--          Hello -->
+    <!--        </p> -->
+    <!--      </div> -->
+    <!--    </div> -->
   </div>
 </template>
+
+<style scoped>
+.columns {
+  display: flex;
+}
+
+.has-text-centered {
+  text-align: center !important;
+}
+
+.column {
+  display: block;
+  flex: 1 1 0;
+  padding: 0.75rem;
+}
+
+.heading {
+  display: block;
+  margin-bottom: 5px;
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.title {
+  font-size: 2rem;
+  font-weight: 600;
+  line-height: 1.125;
+  color: #363636;
+}
+
+.subtitle,
+.title {
+  word-break: break-word;
+}
+</style>

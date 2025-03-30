@@ -1,6 +1,6 @@
+import type { KpuFormProps } from '@/adapter/form'
+import type { VxeTableGridOptions } from '@/adapter/vxe-table'
 import type { DefApplicationResultVO } from '@/api/devOperation/application/model/defApplicationModel.ts'
-import type { KpuFormProps } from '@/ui/form-ui'
-import type { VxeTableGridOptions } from '@/ui/vxe-table'
 import YesOrNoEnum from '@/enums/common/yesOrNoEnum.ts'
 import { DictEnum, FileBizTypeEnum } from '@/enums/commonEnum.ts'
 import { $t } from '@/locales'
@@ -66,7 +66,7 @@ export const formItems: KpuFormProps = {
   ],
 }
 // function formatterYesNo({ cellValue }) {
-//   return cellValue ? t('lamp.common.yes') : t('lamp.common.no')
+//   return cellValue ? t('common.yes') : t('common.no')
 // }
 
 export const columns: VxeTableGridOptions<DefApplicationResultVO> = {
@@ -118,7 +118,7 @@ export const columns: VxeTableGridOptions<DefApplicationResultVO> = {
       slots: {
         default: ({ row }) => {
           return (
-            <Tag type={row?.isGeneral ? 'success' : 'error'}>{row?.isGeneral ? $t('common.yes') : $t('common.no')}</Tag>)
+            <Tag color={row?.isGeneral ? 'success' : 'error'}>{row?.isGeneral ? $t('common.yes') : $t('common.no')}</Tag>)
         },
       },
     },

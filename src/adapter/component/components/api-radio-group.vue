@@ -107,13 +107,13 @@ watch(
   },
   { deep: true },
 )
-const slots: Record<string, Function> = useSlots()
+const slots: Record<string, any> = useSlots()
 </script>
 
 <template>
   <ASpin :spinning="loading" class="ml-5">
     <ARadioGroup v-model:value="value" :button-style="isBtn ? 'solid' : 'outline'" :option-type="isBtn ? 'button' : 'default'" :options="getOptions" class="w-full">
-      <slot v-for="(slot) in slots" :key="slot" :name="slot" />
+      <slot v-for="(slot) in Object.keys(slots)" :key="slot" :name="slot" />
     </ARadioGroup>
   </ASpin>
 </template>

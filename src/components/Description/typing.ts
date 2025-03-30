@@ -1,5 +1,5 @@
+import type { CustomRenderType } from '@/ui/form-ui/types.ts'
 // import type { CollapseContainerOptions } from '@/components/Container/index'
-// import type { DescriptionProps as DescriptionsProps } from 'element-plus'
 import type { CSSProperties, VNode } from 'vue'
 
 export interface DescItem {
@@ -7,7 +7,7 @@ export interface DescItem {
   contentMinWidth?: number
   labelStyle?: CSSProperties
   field: string
-  label?: string
+  label?: CustomRenderType
   // Merge column
   span?: number
   show?: (...arg: any) => boolean
@@ -26,7 +26,7 @@ export interface DescriptionProps {
   useCollapse?: boolean
 
   field: string
-  label?: string
+  label?: CustomRenderType
   /**
    * item configuration
    * @type DescItem

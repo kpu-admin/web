@@ -175,36 +175,25 @@ const useRouteStore = defineStore(
 
     // 生成路由（后端获取）
     async function generateRoutesAtBack() {
-      try {
-        const res = await requestClient.get<any>('/anyone/visible/resource', {
-          params: {
-            type: 'KPU_WEB_PRO_KPU',
-          },
-        })
-        // 设置 routes 数据
-        routesRaw.value = convertSingleRoutes(sortRoutes(formatBackRoutes(res.routerList) as any))
-        // 创建路由匹配器
-        const routes: RouteRecordRaw[] = []
-        routesRaw.value.forEach((route) => {
-          if (route.children) {
-            routes.push(...route.children)
-          }
-        })
-        routesMatcher.value = createRouterMatcher(routes, {})
-        isGenerate.value = true
-        // 初始化常驻标签页
-        if (settingsStore.settings.tabbar.enable) {
-          tabbarStore.initPermanentTab()
+      const res = await requestClient.get<any>('/anyone/visible/resource', {
+        params: {
+          type: 'KPU_WEB_PRO_KPU',
+        },
+      })
+      // 设置 routes 数据
+      routesRaw.value = convertSingleRoutes(sortRoutes(formatBackRoutes(res.routerList) as any))
+      // 创建路由匹配器
+      const routes: RouteRecordRaw[] = []
+      routesRaw.value.forEach((route) => {
+        if (route.children) {
+          routes.push(...route.children)
         }
-      }
-      catch (error: any) {
-        if (['ERR_BAD_RESPONSE', 'ERR_BAD_REQUEST'].includes(error.code)) {
-          isGenerate.value = true
-        }
-        else {
-          isGenerate.value = false
-        }
-        console.error(error)
+      })
+      routesMatcher.value = createRouterMatcher(routes, {})
+      isGenerate.value = true
+      // 初始化常驻标签页
+      if (settingsStore.settings.tabbar.enable) {
+        tabbarStore.initPermanentTab()
       }
     }
     // 生成路由（文件系统生成）

@@ -1,32 +1,32 @@
 <script setup lang="ts">
+import { computed, toRaw, unref, watch } from 'vue';
+
 import { cn, isFunction, triggerWindowResize } from '@/utils'
 
-import { computed, toRaw, unref, watch } from 'vue'
+import { COMPONENT_MAP } from '../config';
+import { injectFormProps } from '../use-form-context';
 
-import { COMPONENT_MAP } from '../config'
-import { injectFormProps } from '../use-form-context'
+const { $t } = useSimpleLocale();
 
-const { $t } = useSimpleLocale()
+const [rootProps, form] = injectFormProps();
 
-const [rootProps, form] = injectFormProps()
-
-const collapsed = defineModel({ default: false })
+const collapsed = defineModel({ default: false });
 
 const resetButtonOptions = computed(() => {
   return {
     content: `${$t.value('reset')}`,
     show: true,
     ...unref(rootProps).resetButtonOptions,
-  }
-})
+  };
+});
 
 const submitButtonOptions = computed(() => {
   return {
     content: `${$t.value('submit')}`,
     show: true,
     ...unref(rootProps).submitButtonOptions,
-  }
-})
+  };
+});
 
 // const isQueryForm = computed(() => {
 //   return !!unref(rootProps).showCollapseButton;
@@ -36,56 +36,54 @@ const queryFormStyle = computed(() => {
   if (!unref(rootProps).actionWrapperClass) {
     return {
       'grid-column': `-2 / -1`,
-      'marginLeft': 'auto',
-    }
+      marginLeft: 'auto',
+    };
   }
 
-  return {}
-})
+  return {};
+});
 
 async function handleSubmit(e: Event) {
-  e?.preventDefault()
-  e?.stopPropagation()
-  const { valid } = await form.validate()
+  e?.preventDefault();
+  e?.stopPropagation();
+  const { valid } = await form.validate();
   if (!valid) {
-    return
+    return;
   }
 
-  const values = toRaw(await unref(rootProps).formApi?.getValues())
-  await unref(rootProps).handleSubmit?.(values)
+  const values = toRaw(await unref(rootProps).formApi?.getValues());
+  await unref(rootProps).handleSubmit?.(values);
 }
 
 async function handleReset(e: Event) {
-  e?.preventDefault()
-  e?.stopPropagation()
-  const props = unref(rootProps)
+  e?.preventDefault();
+  e?.stopPropagation();
+  const props = unref(rootProps);
 
-  const values = toRaw(props.formApi?.getValues())
+  const values = toRaw(props.formApi?.getValues());
 
   if (isFunction(props.handleReset)) {
-    await props.handleReset?.(values)
-  }
-  else {
-    form.resetForm()
+    await props.handleReset?.(values);
+  } else {
+    form.resetForm();
   }
 }
 
 watch(
   () => collapsed.value,
   () => {
-    const props = unref(rootProps)
+    const props = unref(rootProps);
     if (props.collapseTriggerResize) {
-      triggerWindowResize()
+      triggerWindowResize();
     }
   },
-)
+);
 
 defineExpose({
   handleReset,
   handleSubmit,
-})
+});
 </script>
-
 <template>
   <div
     :class="
@@ -99,52 +97,52 @@ defineExpose({
   >
     <template v-if="rootProps.actionButtonsReverse">
       <!-- 提交按钮前 -->
-      <slot name="submit-before" />
+      <slot name="submit-before"></slot>
 
       <component
         :is="COMPONENT_MAP.PrimaryButton"
         v-if="submitButtonOptions.show"
         class="ml-3"
         type="button"
-        v-bind="submitButtonOptions"
         @click="handleSubmit"
+        v-bind="submitButtonOptions"
       >
         {{ submitButtonOptions.content }}
       </component>
     </template>
 
     <!-- 重置按钮前 -->
-    <slot name="reset-before" />
+    <slot name="reset-before"></slot>
 
     <component
       :is="COMPONENT_MAP.DefaultButton"
       v-if="resetButtonOptions.show"
       class="ml-3"
       type="button"
-      v-bind="resetButtonOptions"
       @click="handleReset"
+      v-bind="resetButtonOptions"
     >
       {{ resetButtonOptions.content }}
     </component>
 
     <template v-if="!rootProps.actionButtonsReverse">
       <!-- 提交按钮前 -->
-      <slot name="submit-before" />
+      <slot name="submit-before"></slot>
 
       <component
         :is="COMPONENT_MAP.PrimaryButton"
         v-if="submitButtonOptions.show"
         class="ml-3"
         type="button"
-        v-bind="submitButtonOptions"
         @click="handleSubmit"
+        v-bind="submitButtonOptions"
       >
         {{ submitButtonOptions.content }}
       </component>
     </template>
 
     <!-- 展开按钮前 -->
-    <slot name="expand-before" />
+    <slot name="expand-before"></slot>
 
     <KpuExpandableArrow
       v-if="rootProps.showCollapseButton"
@@ -155,6 +153,6 @@ defineExpose({
     </KpuExpandableArrow>
 
     <!-- 展开按钮后 -->
-    <slot name="expand-after" />
+    <slot name="expand-after"></slot>
   </div>
 </template>

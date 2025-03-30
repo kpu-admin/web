@@ -47,19 +47,19 @@ const apps = ref([{
 </script>
 
 <template>
-  <ElCard class="recommendation" :body-style="{ height: '100%' }">
-    <template #header>
-      <KpuIcon name="ri:reserved-line" />
+  <ACard class="recommendation" :body-style="{ height: '100%' }">
+    <template #title>
+      <KpuIcon name="i-ri:reserved-line" />
       经营建议
     </template>
-    <ElRow :gutter="20">
-      <ElCol v-for="(item, i) in apps" :key="i" :lg="6" :md="8" :sm="8" :xl="6" :xs="24">
+    <ARow :gutter="20">
+      <ACol v-for="(item, i) in apps" :key="i" :lg="6" :md="8" :sm="8" :xl="6" :xs="24">
         <router-link v-slot="{ href }" custom :to="item.link">
           <a :href="href" class="cursor-pointer no-underline">
             <div class="icon-panel h-17.5 p-2.5">
-              <el-badge :value="item.value" class="item">
+              <ABadge :count="item.value" class="item">
                 <KpuIcon :name="item.icon" />
-              </el-badge>
+              </ABadge>
               <div class="icon-panel-title">
                 {{ item.title }}
                 <div class="icon-panel-tips">
@@ -69,25 +69,16 @@ const apps = ref([{
             </div>
           </a>
         </router-link>
-      </ElCol>
-    </ElRow>
-  </ElCard>
+      </ACol>
+    </ARow>
+  </ACard>
 </template>
 
 <style scoped>
 .recommendation {
-  &.el-card,
-  .el-card {
+  &.ant-card,
+  .ant-card {
     margin-bottom: 1.25rem;
-  }
-
-  :deep(.el-card__header) {
-    justify-content: flex-start;
-
-    &::after {
-      position: unset;
-      content: unset;
-    }
   }
 
   .icon-panel:hover .item > i {
@@ -111,9 +102,8 @@ const apps = ref([{
 
   .icon-panel-title {
     display: inline-block;
-    padding-top: 10px;
     margin-left: 10px;
-    vertical-align: -10px;
+    vertical-align: 6px;
     color: #0f0f0f;
 
     .icon-panel-tips {

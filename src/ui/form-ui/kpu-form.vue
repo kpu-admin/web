@@ -1,21 +1,21 @@
 <script setup lang="ts">
-import type { ExtendedFormApi, KpuFormProps } from './types'
-import { useForwardPropsEmits } from 'reka-ui'
-import { ref, watchEffect } from 'vue'
+import type { KpuFormProps } from './types';
 
-import FormActions from './components/form-actions.vue'
+import { ref, watchEffect } from 'vue';
+
+import { useForwardPropsEmits } from 'reka-ui'
+
+import FormActions from './components/form-actions.vue';
 import {
   COMPONENT_BIND_EVENT_MAP,
   COMPONENT_MAP,
   DEFAULT_FORM_COMMON_CONFIG,
-} from './config'
-import { Form } from './form-render'
-import { provideFormProps, useFormInitial } from './use-form-context'
+} from './config';
+import { Form } from './form-render';
+import { provideFormProps, useFormInitial } from './use-form-context';
 
 // 通过 extends 会导致热更新卡死
-interface Props extends KpuFormProps {
-  formApi: ExtendedFormApi
-}
+interface Props extends KpuFormProps {}
 const props = withDefaults(defineProps<Props>(), {
   actionWrapperClass: '',
   collapsed: false,
@@ -29,23 +29,25 @@ const props = withDefaults(defineProps<Props>(), {
   showDefaultActions: true,
   submitButtonOptions: () => ({}),
   wrapperClass: 'grid-cols-1',
-})
+});
 
-const forward = useForwardPropsEmits(props)
+const forward = useForwardPropsEmits(props);
 
-const currentCollapsed = ref(false)
+const currentCollapsed = ref(false);
 
-const { delegatedSlots, form } = useFormInitial(props)
+const { delegatedSlots, form } = useFormInitial(props);
 
-provideFormProps([props, form])
+// eslint-disable-next-line ts/ban-ts-comment
+// @ts-expect-error
+provideFormProps([props, form]);
 
-function handleUpdateCollapsed(value: boolean) {
-  currentCollapsed.value = !!value
-}
+const handleUpdateCollapsed = (value: boolean) => {
+  currentCollapsed.value = !!value;
+};
 
 watchEffect(() => {
-  currentCollapsed.value = props.collapsed
-})
+  currentCollapsed.value = props.collapsed;
+});
 </script>
 
 <template>
@@ -62,7 +64,7 @@ watchEffect(() => {
       :key="slotName"
       #[slotName]="slotProps"
     >
-      <slot :name="slotName" v-bind="slotProps" />
+      <slot :name="slotName" v-bind="slotProps"></slot>
     </template>
     <template #default="slotProps">
       <slot v-bind="slotProps">

@@ -39,8 +39,8 @@ function handleTips() {
 </script>
 
 <template>
-  <ElCard class="page-header" shadow="never">
-    <el-avatar class="page-header-avatar" :src="userStore.avatar" />
+  <ACard class="page-header" shadow="never">
+    <AAvatar class="page-header-avatar" :src="userStore.avatar" />
     <div class="page-header-tip">
       <p class="page-header-tip-title">
         {{ handleTips() }}
@@ -50,19 +50,19 @@ function handleTips() {
         v-html="state.description"
       />
     </div>
-  </ElCard>
+  </ACard>
 </template>
 
 <style scoped>
 .page-header {
-  &.el-card {
+  &.ant-card {
     position: relative;
     min-height: 120px;
     cursor: pointer;
     background: #fff linear-gradient(120deg, rgb(var(--primary) / 10%) 10%, #fff) no-repeat;
   }
 
-  :deep(.el-card__body) {
+  :deep(.ant-card-body) {
     position: relative;
     display: flex;
     flex-direction: row;

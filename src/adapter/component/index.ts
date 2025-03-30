@@ -91,15 +91,15 @@ function toPascalCase(input: string | null) {
 }
 
 const componentMap = new Map()
-const componentRegistry: Record<string, any> = import.meta.glob('./components/*.vue', { eager: true })
-Object.keys(componentRegistry).forEach((filePath) => {
+const componentRegistrys: Record<string, any> = import.meta.glob('./components/*.vue', { eager: true })
+Object.keys(componentRegistrys).forEach((filePath) => {
   if (!filePath.includes('-ignore')) {
-    const componentDefinition = componentRegistry[filePath]?.default || {}
+    const componentDefinition = componentRegistrys[filePath]?.default || {}
     const normalizedName = normalizeName(filePath)
     componentMap.set(toPascalCase(normalizedName), componentDefinition)
   }
 })
-function lqe(components: Partial<Record<ComponentType, Component>>) {
+function componentRegistry(components: Partial<Record<ComponentType, Component>>) {
   componentMap.forEach((component, componentName) => {
     components[componentName] = component
   })
@@ -182,7 +182,7 @@ async function initComponentAdapter() {
     TreeSelect: withDefaultPlaceholder(TreeSelect, 'select'),
     Upload,
   }
-  lqe(components)
+  componentRegistry(components)
   // 将组件注册到全局共享状态中
   globalShareState.setComponents(components)
 

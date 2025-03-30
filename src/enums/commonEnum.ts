@@ -25,7 +25,10 @@ export enum FileBizTypeEnum {
   // 扩展库 消息内容附件
   EXTEND_MSG_CONTENT = 'EXTEND__MSG__CONTENT',
 }
-
+export enum FileBucketEnum {
+  // 需要自行在华为云或minio等第三方对象存储提前创建 公开读写的桶
+  public = 'tt-public',
+}
 export enum EnumEnum {
   // msg
   TaskStatus = 'TaskStatus',

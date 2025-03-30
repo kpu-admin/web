@@ -8,6 +8,7 @@ import router from '@/router'
 import useSettingsStore from '@/store/modules/settings.ts'
 import useUserStore from '@/store/modules/user.ts'
 import { authenticateResponseInterceptor, defaultResponseInterceptor, errorMessageResponseInterceptor, RequestClient } from '@/utils/request-client'
+import storage from '@/utils/storage.ts'
 import { Base64 } from 'js-base64'
 import { toast } from 'vue-sonner'
 
@@ -42,10 +43,14 @@ function createRequestClient(baseURL: string, options?: RequestClientOptions) {
    */
   async function doRefreshToken() {
     const userStore = useUserStore()
-    const resp = await refreshTokenApi()
-    const newToken = resp.data
-    userStore.token = newToken
-    return newToken
+    const refreshToken = storage.local.get('refreshToken') || ''
+    const { token, refreshToken: newRefreshToken1 } = await refreshTokenApi({ refreshToken })
+    // const newToken = resp.data
+    userStore.token = token
+    storage.local.set('token', token)
+    storage.local.set('refreshToken', newRefreshToken1)
+
+    return token
   }
 
   function formatToken(token: null | string) {

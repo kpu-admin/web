@@ -11,7 +11,7 @@ export * from './object'
 export * from './state-handler'
 export * from './util'
 export { cloneDeep } from 'es-toolkit'
-export { get, isEqual } from 'lodash-es'
+export { get, isEqual, set } from 'lodash-es'
 
 export function resolveRoutePath(basePath?: string, routePath?: string) {
   return basePath ? path.resolve(basePath, routePath ?? '') : routePath ?? ''

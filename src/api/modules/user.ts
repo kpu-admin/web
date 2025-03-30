@@ -16,11 +16,14 @@ export function favorites() {
 /**
  * 刷新accessToken
  */
-export async function refreshTokenApi() {
+export async function refreshTokenApi(params: { refreshToken: string }) {
   return requestClient.post<{
-    data: string
-    status: number
-  }>('/auth/refresh', {}, {
+    token: string
+    tenantId: string
+    refreshToken: string
+    expiration: string
+  }>('/anyTenant/refresh', {}, {
+    params,
     withCredentials: true,
   })
 }

@@ -11,9 +11,14 @@ export default function useMainPage() {
   const tabbar = useTabbar()
 
   function reload() {
+    settingsStore.setIsReloading(true)
     router.push(
       { name: 'reload' },
-    )
+    ).then(() => {
+      setTimeout(() => {
+        settingsStore.setIsReloading(false)
+      }, 100)
+    })
   }
   function setCustomTitle(title: string) {
     settingsStore.setCustomTitle(route.fullPath, title)

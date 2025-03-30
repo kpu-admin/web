@@ -6,6 +6,7 @@
   "parentId": "parentId",
   "parentKey": "parentKey",
   "parentName": "parentName",
+  "label": "label",
   "key": "key",
   "classify": "classify",
   "name": "name",

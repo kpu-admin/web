@@ -1,30 +1,30 @@
-import type { FormRenderProps } from '../types'
+import type { FormRenderProps } from '../types';
 
-import { breakpointsTailwind, useBreakpoints } from '@vueuse/core'
+import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue';
 
-import { computed, nextTick, onMounted, ref, useTemplateRef, watch } from 'vue'
+import { breakpointsTailwind, useBreakpoints } from '@vueuse/core';
 
 /**
  * 动态计算行数
  */
 export function useExpandable(props: FormRenderProps) {
-  const wrapperRef = useTemplateRef<HTMLElement>('wrapperRef')
-  const rowMapping = ref<Record<number, number>>({})
+  const wrapperRef = useTemplateRef<HTMLElement>('wrapperRef');
+  const rowMapping = ref<Record<number, number>>({});
   // 是否已经计算过一次
-  const isCalculated = ref(false)
+  const isCalculated = ref(false);
 
-  const breakpoints = useBreakpoints(breakpointsTailwind)
+  const breakpoints = useBreakpoints(breakpointsTailwind);
 
   const keepFormItemIndex = computed(() => {
-    const rows = props.collapsedRows ?? 1
-    const mapping = rowMapping.value
-    let maxItem = 0
+    const rows = props.collapsedRows ?? 1;
+    const mapping = rowMapping.value;
+    let maxItem = 0;
     for (let index = 1; index <= rows; index++) {
-      maxItem += mapping?.[index] ?? 0
+      maxItem += mapping?.[index] ?? 0;
     }
     // 保持一行
-    return maxItem - 1 || 1
-  })
+    return maxItem - 1 || 1;
+  });
 
   watch(
     [
@@ -34,22 +34,22 @@ export function useExpandable(props: FormRenderProps) {
     ],
     async ([val]) => {
       if (val) {
-        await nextTick()
-        rowMapping.value = {}
-        isCalculated.value = false
-        await calculateRowMapping()
+        await nextTick();
+        rowMapping.value = {};
+        isCalculated.value = false;
+        await calculateRowMapping();
       }
     },
-  )
+  );
 
   async function calculateRowMapping() {
     if (!props.showCollapseButton) {
-      return
+      return;
     }
 
-    await nextTick()
+    await nextTick();
     if (!wrapperRef.value) {
-      return
+      return;
     }
     // 小屏幕不计算
     // if (breakpoints.smaller('sm').value) {
@@ -58,42 +58,42 @@ export function useExpandable(props: FormRenderProps) {
     //   return;
     // }
 
-    const formItems = [...wrapperRef.value.children]
+    const formItems = [...wrapperRef.value.children];
 
-    const container = wrapperRef.value
-    const containerStyles = window.getComputedStyle(container)
+    const container = wrapperRef.value;
+    const containerStyles = window.getComputedStyle(container);
     const rowHeights = containerStyles
       .getPropertyValue('grid-template-rows')
-      .split(' ')
+      .split(' ');
 
-    const containerRect = container?.getBoundingClientRect()
+    const containerRect = container?.getBoundingClientRect();
 
     formItems.forEach((el) => {
-      const itemRect = el.getBoundingClientRect()
+      const itemRect = el.getBoundingClientRect();
 
       // 计算元素在第几行
-      const itemTop = itemRect.top - containerRect.top
-      let rowStart = 0
-      let cumulativeHeight = 0
+      const itemTop = itemRect.top - containerRect.top;
+      let rowStart = 0;
+      let cumulativeHeight = 0;
 
       for (const [i, rowHeight] of rowHeights.entries()) {
-        cumulativeHeight += Number.parseFloat(rowHeight)
+        cumulativeHeight += Number.parseFloat(rowHeight);
         if (itemTop < cumulativeHeight) {
-          rowStart = i + 1
-          break
+          rowStart = i + 1;
+          break;
         }
       }
       if (rowStart > (props?.collapsedRows ?? 1)) {
-        return
+        return;
       }
-      rowMapping.value[rowStart] = (rowMapping.value[rowStart] ?? 0) + 1
-      isCalculated.value = true
-    })
+      rowMapping.value[rowStart] = (rowMapping.value[rowStart] ?? 0) + 1;
+      isCalculated.value = true;
+    });
   }
 
   onMounted(() => {
-    calculateRowMapping()
-  })
+    calculateRowMapping();
+  });
 
-  return { isCalculated, keepFormItemIndex, wrapperRef }
+  return { isCalculated, keepFormItemIndex, wrapperRef };
 }

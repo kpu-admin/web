@@ -46,6 +46,7 @@ const useUserStore = defineStore(
       storage.local.set('account', data.username)
       storage.local.set('token', res.token)
       storage.local.set('avatar', res.avatar)
+      storage.local.set('refreshToken', res.refreshToken)
       account.value = data.username
       token.value = res.token
       avatar.value = res.avatar
@@ -53,6 +54,7 @@ const useUserStore = defineStore(
     // 登出
     async function logout(redirect = router.currentRoute.value.fullPath) {
       storage.local.remove('token')
+      storage.local.remove('refreshToken')
       token.value = ''
       router.push({
         name: 'login',
@@ -63,6 +65,8 @@ const useUserStore = defineStore(
     }
     function requestLogout() {
       storage.local.remove('token')
+      storage.local.remove('refreshToken')
+
       token.value = ''
       if (settingsStore.settings.app.loginExpiredMode === 'redirect') {
         router.push({
@@ -81,6 +85,7 @@ const useUserStore = defineStore(
     function logoutCleanStatus() {
       storage.local.remove('account')
       storage.local.remove('avatar')
+
       account.value = ''
       avatar.value = ''
       permissions.value = []

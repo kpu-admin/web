@@ -163,13 +163,13 @@ function subtractLight(color: string, amount: number) {
 export function getResourceTagColor(resourceType: string, hidden: boolean) {
   switch (resourceType) {
     case ResourceTypeEnum.MENU:
-      return hidden ? 'primary' : 'info'
+      return hidden ? 'default' : 'success'
     case ResourceTypeEnum.FUNCTION:
-      return 'danger'
+      return 'cyan'
     case ResourceTypeEnum.FIELD:
-      return 'success'
+      return 'blue'
     case ResourceTypeEnum.DATA:
-      return 'warning'
+      return 'purple'
     default:
       return 'success'
   }

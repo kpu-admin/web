@@ -1,11 +1,12 @@
 <script setup lang="ts">
+import type { CustomRenderType } from '@/ui/form-ui/types.ts'
 import type { CSSProperties } from 'vue'
 import type { DescItem } from './typing.ts'
 import { componentMap } from '@/adapter/vxe-table.ts'
 
 withDefaults(
   defineProps<{
-    title?: string
+    title?: CustomRenderType
     bordered?: boolean
     size?: '' | 'large' | 'default' | 'small'
     column?: number

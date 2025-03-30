@@ -4,7 +4,6 @@ import { get } from '@/utils'
 import { globalShareState } from '@/utils/global-state.ts'
 import { Image as AImage, Button } from 'ant-design-vue'
 
-import domZIndex from 'dom-zindex'
 import { h } from 'vue'
 import { useKpuForm } from './form'
 
@@ -12,7 +11,7 @@ import { useKpuForm } from './form'
 // domZIndex.getMax()
 
 // 设置当前 z-index 起始值
-domZIndex.setCurrent(2000)
+// domZIndex.setCurrent(2000)
 const uY: Record<string, string> = {
   Checkbox: 'checked',
   Radio: 'checked',

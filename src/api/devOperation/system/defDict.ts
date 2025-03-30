@@ -29,7 +29,7 @@ export function save(params: DefDictSaveVO) {
 }
 
 export function update(params: DefDictUpdateVO) {
-  return requestClient.post<DefDictResultVO>(Api.Update.url, params)
+  return requestClient.put<DefDictResultVO>(Api.Update.url, params)
 }
 
 export function remove(ids: string[]) {

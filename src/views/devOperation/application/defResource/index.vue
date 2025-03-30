@@ -1,155 +1,66 @@
 <script setup lang="ts">
-import { useKpuForm } from '@/adapter/form.ts'
-// import { ElCheckbox, ElMessage } from 'element-plus'
+import { ResourceTypeEnum } from '@/enums/common/tenant'
+import { ActionEnum } from '@/enums/commonEnum'
+import { useMessage } from '@/hooks/useMessage'
+import DefResourceEdit from './Edit.vue'
+import DefResourceTree from './Tree.vue'
 
-const [Form] = useKpuForm({
-  commonConfig: {
-    // 所有表单项
-    componentProps: {
-      class: 'w-full',
-    },
-  },
-  layout: 'horizontal',
-  // 大屏一行显示3个，中屏一行显示2个，小屏一行显示1个
-  wrapperClass: 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3',
-  handleSubmit: (_values) => {
-    // ElMessage.success(`表单数据：${JSON.stringify(values)}`)
-  },
-  schema: [
-    // {
-    //   // 组件需要在 #/adapter.ts内注册，并加上类型
-    //   component: 'ApiSelect',
-    //   // 对应组件的参数
-    //   componentProps: {
-    //     // 菜单接口转options格式
-    //     afterFetch: (data: { name: string, path: string }[]) => {
-    //       return data.map((item: any) => ({
-    //         label: item.name,
-    //         value: item.path,
-    //       }))
-    //     },
-    //     // 菜单接口
-    //     // api: getAllMenusApi,
-    //   },
-    //   // 字段名
-    //   fieldName: 'api',
-    //   // 界面显示的label
-    //   label: 'ApiSelect',
-    // },
-    // {
-    //   component: 'ApiTreeSelect',
-    //   // 对应组件的参数
-    //   componentProps: {
-    //     // 菜单接口
-    //     api: getAllMenusApi,
-    //     childrenField: 'children',
-    //     // 菜单接口转options格式
-    //     labelField: 'name',
-    //     valueField: 'path',
-    //   },
-    //   // 字段名
-    //   fieldName: 'apiTree',
-    //   // 界面显示的label
-    //   label: 'ApiTreeSelect',
-    // },
-    {
-      component: 'Input',
-      fieldName: 'string',
-      label: 'String',
-    },
-    {
-      component: 'InputNumber',
-      fieldName: 'number',
-      label: 'Number',
-    },
-    {
-      component: 'RadioGroup',
-      fieldName: 'radio',
-      label: 'Radio',
-      componentProps: {
-        options: [
-          { value: 'A', label: 'A' },
-          { value: 'B', label: 'B' },
-          { value: 'C', label: 'C' },
-          { value: 'D', label: 'D' },
-          { value: 'E', label: 'E' },
-        ],
-      },
-    },
-    {
-      component: 'RadioGroup',
-      fieldName: 'radioButton',
-      label: 'RadioButton',
-      componentProps: {
-        isButton: true,
-        options: ['A', 'B', 'C', 'D', 'E', 'F'].map(v => ({
-          value: v,
-          label: `选项${v}`,
-        })),
-      },
-    },
-    {
-      component: 'CheckboxGroup',
-      fieldName: 'checkbox',
-      label: 'Checkbox',
-      componentProps: {
-        options: ['A', 'B', 'C'].map(v => ({ value: v, label: `选项${v}` })),
-      },
-    },
-    {
-      component: 'CheckboxGroup',
-      fieldName: 'checkbox1',
-      label: 'Checkbox1',
-      // renderComponentContent: () => {
-      //   return {
-      //     default: () => {
-      //       return ['A', 'B', 'C', 'D'].map(v =>
-      //         // h(Checkbox, { label: v, value: v }),
-      //       )
-      //     },
-      //   }
-      // },
-    },
-    {
-      component: 'CheckboxGroup',
-      fieldName: 'checkbotton',
-      label: 'CheckBotton',
-      componentProps: {
-        isButton: true,
-        options: [
-          { value: 'A', label: '选项A' },
-          { value: 'B', label: '选项B' },
-          { value: 'C', label: '选项C' },
-        ],
-      },
-    },
-    {
-      component: 'DatePicker',
-      fieldName: 'date',
-      label: 'Date',
-    },
-    {
-      component: 'Select',
-      fieldName: 'select',
-      label: 'Select',
-      componentProps: {
-        filterable: true,
-        options: [
-          { value: 'A', label: '选项A' },
-          { value: 'B', label: '选项B' },
-          { value: 'C', label: '选项C' },
-        ],
-      },
-    },
-  ],
-})
+const { createMessage } = useMessage()
+
+const treeRef = useTemplateRef<any>('treeRef')
+const editRef = useTemplateRef<any>('editRef')
+// 获取编辑表单
+function getEditRef() {
+  return unref(editRef)
+}
+// 获取树
+function getTreeRef() {
+  return unref(treeRef)
+}
+
+// 编辑成功回调
+function handleEditSuccess(applicationId: string) {
+  getTreeRef().fetch(applicationId)
+}
+
+// 选中树的节点
+function handleTreeSelect(parent = {}, record = {}) {
+  getEditRef().setData({ type: ActionEnum.VIEW, parent, record })
+}
+
+// 编辑
+function handleTreeEdit(parent = {}, record = {}) {
+  getEditRef().setData({ type: ActionEnum.EDIT, parent, record })
+}
+
+// 点击树的新增按钮
+function handleTreeAdd(parent = {} as { resourceType: string }, record = {}) {
+  if (parent?.resourceType === ResourceTypeEnum.FIELD) {
+    createMessage.warn('字段下不能添加子资源')
+    getEditRef().resetForm(record)
+  }
+  else {
+    getEditRef().setData({ type: ActionEnum.ADD, parent, record })
+  }
+}
+function handlerApplicationChange(applicationId: string, applicationName: string) {
+  getEditRef().resetForm({ applicationId, applicationName })
+}
 </script>
 
 <template>
   <div>
-    <KpuPageHeader title="表单示例" />
-    <KpuPageMain>
-      <Form />
-    </KpuPageMain>
+    <KpuLayoutContainer left-side-width="500px">
+      <template #leftSide>
+        <DefResourceTree
+          ref="treeRef"
+          @select="handleTreeSelect"
+          @add="handleTreeAdd"
+          @edit="handleTreeEdit"
+          @change="handlerApplicationChange"
+        />
+      </template>
+      <DefResourceEdit ref="editRef" @success="handleEditSuccess" />
+    </KpuLayoutContainer>
   </div>
 </template>

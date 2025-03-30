@@ -1,0 +1,61 @@
+.kpu-tree {
+  background-color: #fff;
+
+  .ant-tree-node-content-wrapper {
+    position: relative;
+
+    .ant-tree-title {
+      position: absolute;
+      left: 0;
+      width: 100%;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+    }
+  }
+
+  &__title {
+    position: relative;
+    display: flex;
+    align-items: center;
+    width: 100%;
+    padding-right: 10px;
+
+    &:hover {
+      .kpu-tree__action {
+        visibility: visible;
+      }
+    }
+  }
+
+  &__content {
+    overflow: hidden;
+  }
+
+  &__actions {
+    position: absolute;
+    right: 10px;
+    display: flex;
+  }
+
+  &__action {
+    visibility: hidden;
+    margin-left: 4px;
+  }
+
+  &-header {
+    border-bottom: 1px solid #d9d9d9;
+  }
+
+  .ant-spin-nested-loading {
+    height: 100%;
+
+    .ant-spin-container {
+      height: 100%;
+    }
+  }
+}
+
+span.anticon:not(.app-iconify) {
+  vertical-align: 0.125em !important;
+}

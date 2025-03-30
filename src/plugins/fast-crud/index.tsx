@@ -6,13 +6,14 @@ import type {
   UseCrudProps,
 } from '@fast-crud/fast-crud'
 
-import { findCodeByType, findEnumListByType } from '@/api/modules/common/general.ts'
+import { findCodeByType, findEnumByType } from '@/api/modules/common/general.ts'
 import { uploadFile } from '@/api/modules/file/upload.ts'
 import { $t } from '@/locales'
 
 import KpuIcon from '@/ui/components/KpuIcon/index.vue'
 import { isString } from '@/utils'
 import dateUtil from '@/utils/dayjs'
+import { isFunction } from '@/utils/inference.ts'
 import { FastCrud, FsButton, useColumns, useTypes } from '@fast-crud/fast-crud'
 import {
   FsExtendsCopyable,
@@ -27,6 +28,16 @@ import { notification, Popconfirm } from 'ant-design-vue'
 import '@fast-crud/fast-crud/dist/style.css'
 import '@fast-crud/fast-extends/dist/style.css'
 import '@fast-crud/ui-antdv4/dist/style.css'
+
+export function transformRes(originPageRes: TransformResProps) {
+  const { res } = originPageRes
+  return {
+    currentPage: Number(res.current),
+    pageSize: Number(res.size),
+    total: Number(res.total),
+    records: res.records,
+  }
+}
 
 export function transformQuery(query: PageQuery) {
   const { page, form, sort } = query
@@ -45,15 +56,6 @@ export function transformQuery(query: PageQuery) {
     ...pageParams,
     ...sortParams,
     extra,
-  }
-}
-export function transformRes(originPageRes: TransformResProps) {
-  const { res } = originPageRes
-  return {
-    currentPage: Number(res.current),
-    pageSize: Number(res.size),
-    total: Number(res.total),
-    records: res.records,
   }
 }
 
@@ -82,7 +84,7 @@ function install(app: any, options: any = {}) {
         isEnum = params?.isEnum
       }
       return isEnum
-        ? ((await findEnumListByType(params)) as any as Promise<any>)
+        ? ((await findEnumByType(params)) as any as Promise<any>)
         : ((await findCodeByType(params)) as any as Promise<any>)
     },
     /**
@@ -90,7 +92,8 @@ function install(app: any, options: any = {}) {
      * @param props
      */
     commonOptions(props: UseCrudProps): CrudOptions {
-      const crudBinding: any = props.crudExpose?.crudBinding
+      const { crudExpose } = props
+      const crudBinding: any = crudExpose?.crudBinding
       return {
         toolbar: {
           compact: false,
@@ -119,13 +122,13 @@ function install(app: any, options: any = {}) {
               order: 1,
               size: 'small',
               type: 'link',
-              // icon: null,
+              icon: undefined,
             },
             edit: {
               order: 2,
               size: 'small',
               type: 'link',
-              // icon: null,
+              icon: undefined,
             },
             remove: {
               order: 3,
@@ -135,7 +138,7 @@ function install(app: any, options: any = {}) {
               render(context: any) {
                 function del() {
                   const { row, index } = context
-                  crudBinding.doRemove({
+                  crudExpose.doRemove({
                     row,
                     index,
                   }, {
@@ -145,7 +148,7 @@ function install(app: any, options: any = {}) {
                 return (
                   <Popconfirm onConfirm={del} placement="bottom" cancel-text="取消" ok-text="确认删除" title="确定要删除这条记录吗？">
                     {{
-                      reference: () => (
+                      default: () => (
                         <FsButton
                           className="ant-btn-sm"
                           danger={false}
@@ -232,7 +235,7 @@ function install(app: any, options: any = {}) {
               minWidth: '110px',
             },
           },
-          layout: () => 'horizontal',
+          layout: 'horizontal',
         },
       }
     },
@@ -246,8 +249,12 @@ function install(app: any, options: any = {}) {
       keepName: true,
       name: 'file',
       withCredentials: false,
-      uploadRequest: async ({ file, onProgress }: any) => {
-        return await uploadFile(file, {
+      uploadRequest: async ({ file, onProgress, param }: any) => {
+        let params = param
+        if (isFunction(param)) {
+          params = await param()
+        }
+        return await uploadFile({ file, ...params }, {
           method: 'post',
           headers: {
             'Content-Type': 'multipart/form-data',

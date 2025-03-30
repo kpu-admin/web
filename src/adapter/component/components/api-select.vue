@@ -116,13 +116,13 @@ watch(
   { deep: true },
 )
 
-const slots: Record<string, Function> = useSlots()
+const slots: Record<string, any> = useSlots()
 </script>
 
 <template>
   <!--  z-index 有问题 太小 -->
   <ASelect v-model:value="value" :open="true" :options="getOptions" class="w-full" @dropdown-visible-change="dropdownVisibleChange">
-    <slot v-for="(slot) in slots" :key="slot" :name="slot" />
+    <slot v-for="(slot) in Object.keys(slots)" :key="slot" :name="slot" />
     <template v-if="loading" #suffixIcon>
       <KpuIcon name="i-ant-design:loading-outlined" class="animate-spin" />
     </template>

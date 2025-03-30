@@ -15,7 +15,8 @@ export interface CodeQueryVO {
   type: string
   excludes?: string | string[]
   extend?: OptionsItem
-  extendFirst: boolean
+  isEnum?: boolean
+  extendFirst?: boolean
 }
 
 export interface SystemApiVO {

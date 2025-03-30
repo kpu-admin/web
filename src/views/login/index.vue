@@ -97,7 +97,7 @@ const formRef = ref()
     <div class="login-banner">
       <img src="@/assets/images/logo.png" class="absolute left-4 top-4 h-30px rounded ring ring-stone-2 dark-ring-stone-8">
       <img src="@/assets/images/login-banner.png" class="banner">
-      <Copyright v-if="settingsStore.mode === 'pc' && ['left', 'right'].includes(layout)" />
+      <KpuCopyright v-if="settingsStore.mode === 'pc' && ['left', 'right'].includes(layout)" class="copyright" />
     </div>
     <div class="login-form flex-col-center">
       <Transition name="fade" mode="out-in">

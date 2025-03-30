@@ -1,7 +1,6 @@
 import type { UploadFileParams } from '#/axios'
 import type { AsyncResult, CacheKeyFunc, DelayResult } from '@/api/helper/timeDelayReq'
-import type { RequestClientConfig } from '@/utils/request-client'
-import type { AxiosResponse } from 'axios'
+import type { RequestClientConfig, RequestResponse } from '@/utils/request-client'
 import type { AppendixQuery, AppendixResultVO, FileResultVO } from './model/fileModel'
 import { requestClient } from '@/api'
 import { TimeDelayReq } from '@/api/helper/timeDelayReq'
@@ -9,7 +8,6 @@ import { ContentTypeEnum } from '@/enums/httpEnum.ts'
 import { defaultBase64Img } from '@/utils/file/base64Conver.ts'
 import qs from 'qs'
 
-const MODULAR = ''
 const ServicePrefix = ''
 
 /**
@@ -26,12 +24,10 @@ export function uploadFile(
   )
 }
 export function downloadIds(ids: string[] | number[]) {
-  return requestClient.download<AxiosResponse<Blob>>(`${ServicePrefix}/${MODULAR}/download`, {
-    params: qs.stringify({
-      ids,
-    }, {
-      arrayFormat: 'repeat',
-    }),
+  return requestClient.download<RequestResponse<Blob>>(`${ServicePrefix}/anyone/file/download?${qs.stringify({ ids }, { arrayFormat: 'repeat' })}`, {
+    method: 'GET',
+    responseType: 'blob',
+    responseReturn: 'raw',
   })
 }
 

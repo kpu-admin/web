@@ -1,10 +1,12 @@
-import type { Component } from 'vue'
+import type { Component } from 'vue';
 
 import type {
   BaseFormComponentType,
   FormCommonConfig,
   KpuFormAdapterOptions,
-} from './types'
+} from './types';
+
+import { h } from 'vue';
 
 import KpuButton from '@/ui/components/KpuButton/index.vue'
 
@@ -15,13 +17,11 @@ import KpuSelect from '@/ui/components/KpuSelect/index.vue'
 
 import { globalShareState } from '@/utils/global-state'
 
-import { defineRule } from 'vee-validate'
+import { defineRule } from 'vee-validate';
 
-import { h } from 'vue'
+const DEFAULT_MODEL_PROP_NAME = 'modelValue';
 
-const DEFAULT_MODEL_PROP_NAME = 'modelValue'
-
-export const DEFAULT_FORM_COMMON_CONFIG: FormCommonConfig = {}
+export const DEFAULT_FORM_COMMON_CONFIG: FormCommonConfig = {};
 
 export const COMPONENT_MAP: Record<BaseFormComponentType, Component> = {
   DefaultButton: h(KpuButton, { size: 'sm', variant: 'outline' }),
@@ -48,39 +48,39 @@ export function setupKpuForm<
     disabledOnChangeListener = true,
     disabledOnInputListener = true,
     emptyStateValue = undefined,
-  } = (config || {}) as FormCommonConfig
+  } = (config || {}) as FormCommonConfig;
 
   Object.assign(DEFAULT_FORM_COMMON_CONFIG, {
     disabledOnChangeListener,
     disabledOnInputListener,
     emptyStateValue,
-  })
+  });
 
   if (defineRules) {
     for (const key of Object.keys(defineRules)) {
-      defineRule(key, defineRules[key as never])
+      defineRule(key, defineRules[key as never]);
     }
   }
 
-  const baseModelPropName
-    = config?.baseModelPropName ?? DEFAULT_MODEL_PROP_NAME
+  const baseModelPropName =
+    config?.baseModelPropName ?? DEFAULT_MODEL_PROP_NAME;
   const modelPropNameMap = config?.modelPropNameMap as
     | Record<BaseFormComponentType, string>
-    | undefined
+    | undefined;
 
-  const components = globalShareState.getComponents()
+  const components = globalShareState.getComponents();
 
   for (const component of Object.keys(components)) {
-    const key = component as BaseFormComponentType
-    COMPONENT_MAP[key] = components[component as never]
+    const key = component as BaseFormComponentType;
+    COMPONENT_MAP[key] = components[component as never];
 
     if (baseModelPropName !== DEFAULT_MODEL_PROP_NAME) {
-      COMPONENT_BIND_EVENT_MAP[key] = baseModelPropName
+      COMPONENT_BIND_EVENT_MAP[key] = baseModelPropName;
     }
 
     // 覆盖特殊组件的modelPropName
     if (modelPropNameMap && modelPropNameMap[key]) {
-      COMPONENT_BIND_EVENT_MAP[key] = modelPropNameMap[key]
+      COMPONENT_BIND_EVENT_MAP[key] = modelPropNameMap[key];
     }
   }
 }

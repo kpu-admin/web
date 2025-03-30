@@ -29,7 +29,7 @@ export function save(params: StandardModuleExampleSaveVO) {
   return requestClient.post<StandardModuleExampleResultVO>(Api.Save.url, params)
 }
 export function update(params: StandardModuleExampleUpdateVO) {
-  return requestClient.post<StandardModuleExampleResultVO>(Api.Update.url, params)
+  return requestClient.put<StandardModuleExampleResultVO>(Api.Update.url, params)
 }
 export function remove(params: string[]) {
   return requestClient.delete<boolean>(Api.Delete.url, { data: params })

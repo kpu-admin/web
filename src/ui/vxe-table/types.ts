@@ -62,6 +62,7 @@ export interface VxeGridProps {
    * 显示搜索表单
    */
   showSearchForm?: boolean
+  data?: any
 }
 
 export type ExtendedVxeGridApi = VxeGridApi & {

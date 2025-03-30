@@ -3,9 +3,15 @@ import type {
   GenericObject,
   ResetFormOpts,
   ValidationOptions,
-} from 'vee-validate'
+} from 'vee-validate';
 
-import type { FormActions, FormSchema, KpuFormProps } from './types'
+import type { ComponentPublicInstance } from 'vue';
+
+import type { FormActions, FormSchema, KpuFormProps } from './types';
+
+import { toRaw } from 'vue';
+
+import { Store } from '@/utils/shared/store'
 
 import {
   bindMethods,
@@ -18,9 +24,6 @@ import {
   mergeWithArrayOverride,
   StateHandler,
 } from '@/utils'
-
-import { Store } from '@/utils/shared/store'
-import { toRaw } from 'vue'
 
 function getDefaultState(): KpuFormProps {
   return {
@@ -41,28 +44,33 @@ function getDefaultState(): KpuFormProps {
     submitOnChange: false,
     submitOnEnter: false,
     wrapperClass: 'grid-cols-1',
-  }
+  };
 }
 
 export class FormApi {
   // private api: Pick<KpuFormProps, 'handleReset' | 'handleSubmit'>;
-  public form = {} as FormActions
-  isMounted = false
+  public form = {} as FormActions;
+  isMounted = false;
 
-  public state: null | KpuFormProps = null
-  stateHandler: StateHandler
+  public state: null | KpuFormProps = null;
+  stateHandler: StateHandler;
 
-  public store: Store<KpuFormProps>
+  public store: Store<KpuFormProps>;
+
+  /**
+   * 组件实例映射
+   */
+  private componentRefMap: Map<string, unknown> = new Map();
 
   // 最后一次点击提交时的表单值
-  private latestSubmissionValues: null | Recordable<any> = null
+  private latestSubmissionValues: null | Recordable<any> = null;
 
-  private prevState: null | KpuFormProps = null
+  private prevState: null | KpuFormProps = null;
 
   constructor(options: KpuFormProps = {}) {
-    const { ...storeState } = options
+    const { ...storeState } = options;
 
-    const defaultState = getDefaultState()
+    const defaultState = getDefaultState();
 
     this.store = new Store<KpuFormProps>(
       {
@@ -71,85 +79,125 @@ export class FormApi {
       },
       {
         onUpdate: () => {
-          this.prevState = this.state
-          this.state = this.store.state
-          this.updateState()
+          this.prevState = this.state;
+          this.state = this.store.state;
+          this.updateState();
         },
       },
-    )
+    );
 
-    this.state = this.store.state
-    this.stateHandler = new StateHandler()
-    bindMethods(this)
+    this.state = this.store.state;
+    this.stateHandler = new StateHandler();
+    bindMethods(this);
+  }
+
+  /**
+   * 获取字段组件实例
+   * @param fieldName 字段名
+   * @returns 组件实例
+   */
+  getFieldComponentRef<T = ComponentPublicInstance>(
+    fieldName: string,
+  ): T | undefined {
+    return this.componentRefMap.has(fieldName)
+      ? (this.componentRefMap.get(fieldName) as T)
+      : undefined;
+  }
+
+  /**
+   * 获取当前聚焦的字段，如果没有聚焦的字段则返回undefined
+   */
+  getFocusedField() {
+    for (const fieldName of this.componentRefMap.keys()) {
+      const ref = this.getFieldComponentRef(fieldName);
+      if (ref) {
+        let el: HTMLElement | null = null;
+        if (ref instanceof HTMLElement) {
+          el = ref;
+        } else if (ref.$el instanceof HTMLElement) {
+          el = ref.$el;
+        }
+        if (!el) {
+          continue;
+        }
+        if (
+          el === document.activeElement ||
+          el.contains(document.activeElement)
+        ) {
+          return fieldName;
+        }
+      }
+    }
+    return undefined;
   }
 
   getLatestSubmissionValues() {
-    return this.latestSubmissionValues || {}
+    return this.latestSubmissionValues || {};
   }
 
   getState() {
-    return this.state
+    return this.state;
   }
 
-  async getValues() {
-    const form = await this.getForm()
-    return form.values ? this.handleRangeTimeValue(form.values) : {}
+  async getValues<T = Recordable<any>>() {
+    const form = await this.getForm();
+    return (form.values ? this.handleRangeTimeValue(form.values) : {}) as T;
   }
 
   async isFieldValid(fieldName: string) {
-    const form = await this.getForm()
-    return form.isFieldValid(fieldName)
+    const form = await this.getForm();
+    return form.isFieldValid(fieldName);
   }
 
   merge(formApi: FormApi) {
-    const chain = [this, formApi]
+    const chain = [this, formApi];
     const proxy = new Proxy(formApi, {
       get(target: any, prop: any) {
         if (prop === 'merge') {
           return (nextFormApi: FormApi) => {
-            chain.push(nextFormApi)
-            return proxy
-          }
+            chain.push(nextFormApi);
+            return proxy;
+          };
         }
         if (prop === 'submitAllForm') {
           return async (needMerge: boolean = true) => {
             try {
               const results = await Promise.all(
                 chain.map(async (api) => {
-                  const validateResult = await api.validate()
+                  const validateResult = await api.validate();
                   if (!validateResult.valid) {
-                    return
+                    return;
                   }
-                  const rawValues = toRaw((await api.getValues()) || {})
-                  return rawValues
+                  const rawValues = toRaw((await api.getValues()) || {});
+                  return rawValues;
                 }),
-              )
+              );
               if (needMerge) {
-                const mergedResults = Object.assign({}, ...results)
-                return mergedResults
+                const mergedResults = Object.assign({}, ...results);
+                return mergedResults;
               }
-              return results
+              return results;
+            } catch (error) {
+              console.error('Validation error:', error);
             }
-            catch (error) {
-              console.error('Validation error:', error)
-            }
-          }
+          };
         }
-        return target[prop]
+        return target[prop];
       },
-    })
+    });
 
-    return proxy
+    return proxy;
   }
 
-  mount(formActions: FormActions) {
+  mount(formActions: FormActions, componentRefMap: Map<string, unknown>) {
     if (!this.isMounted) {
-      Object.assign(this.form, formActions)
-      this.stateHandler.setConditionTrue()
+      Object.assign(this.form, formActions);
+      this.stateHandler.setConditionTrue();
       this.setLatestSubmissionValues({
         ...toRaw(this.handleRangeTimeValue(this.form.values)),
-      })
-      this.isMounted = true
+      });
+      this.componentRefMap = componentRefMap;
+      this.isMounted = true;
     }
   }
 
@@ -158,14 +206,14 @@ export class FormApi {
    * @param fields
    */
   async removeSchemaByFields(fields: string[]) {
-    const fieldSet = new Set(fields)
-    const schema = this.state?.schema ?? []
+    const fieldSet = new Set(fields);
+    const schema = this.state?.schema ?? [];
 
-    const filterSchema = schema.filter(item => !fieldSet.has(item.fieldName))
+    const filterSchema = schema.filter((item) => !fieldSet.has(item.fieldName));
 
     this.setState({
       schema: filterSchema,
-    })
+    });
   }
 
   /**
@@ -175,25 +223,25 @@ export class FormApi {
     state?: Partial<FormState<GenericObject>> | undefined,
     opts?: Partial<ResetFormOpts>,
   ) {
-    const form = await this.getForm()
-    return form.resetForm(state, opts)
+    const form = await this.getForm();
+    return form.resetForm(state, opts);
   }
 
   async resetValidate() {
-    const form = await this.getForm()
-    const fields = Object.keys(form.errors.value)
+    const form = await this.getForm();
+    const fields = Object.keys(form.errors.value);
     fields.forEach((field) => {
-      form.setFieldError(field, undefined)
-    })
+      form.setFieldError(field, undefined);
+    });
   }
 
   async setFieldValue(field: string, value: any, shouldValidate?: boolean) {
-    const form = await this.getForm()
-    form.setFieldValue(field, value, shouldValidate)
+    const form = await this.getForm();
+    form.setFieldValue(field, value, shouldValidate);
   }
 
   setLatestSubmissionValues(values: null | Recordable<any>) {
-    this.latestSubmissionValues = { ...toRaw(values) }
+    this.latestSubmissionValues = { ...toRaw(values) };
   }
 
   setState(
@@ -203,11 +251,10 @@ export class FormApi {
   ) {
     if (isFunction(stateOrFn)) {
       this.store.setState((prev) => {
-        return mergeWithArrayOverride(stateOrFn(prev), prev)
-      })
-    }
-    else {
-      this.store.setState(prev => mergeWithArrayOverride(stateOrFn, prev))
+        return mergeWithArrayOverride(stateOrFn(prev), prev);
+      });
+    } else {
+      this.store.setState((prev) => mergeWithArrayOverride(stateOrFn, prev));
     }
   }
 
@@ -222,10 +269,10 @@ export class FormApi {
     filterFields: boolean = true,
     shouldValidate: boolean = false,
   ) {
-    const form = await this.getForm()
+    const form = await this.getForm();
     if (!filterFields) {
-      form.setValues(fields, shouldValidate)
-      return
+      form.setValues(fields, shouldValidate);
+      return;
     }
 
     /**
@@ -236,192 +283,176 @@ export class FormApi {
      */
     const fieldMergeFn = createMerge((obj, key, value) => {
       if (key in obj) {
-        obj[key]
-          = !Array.isArray(obj[key])
-            && isObject(obj[key])
-            && !isDayjsObject(obj[key])
-            && !isDate(obj[key])
+        obj[key] =
+          !Array.isArray(obj[key]) &&
+          isObject(obj[key]) &&
+          !isDayjsObject(obj[key]) &&
+          !isDate(obj[key])
             ? fieldMergeFn(obj[key], value)
-            : value
+            : value;
       }
-      return true
-    })
-    const filteredFields = fieldMergeFn(fields, form.values)
-    form.setValues(filteredFields, shouldValidate)
+      return true;
+    });
+    const filteredFields = fieldMergeFn(fields, form.values);
+    form.setValues(filteredFields, shouldValidate);
   }
 
   async submitForm(e?: Event) {
-    e?.preventDefault()
-    e?.stopPropagation()
-    const form = await this.getForm()
-    await form.submitForm()
-    const rawValues = toRaw(await this.getValues())
-    await this.state?.handleSubmit?.(rawValues)
+    e?.preventDefault();
+    e?.stopPropagation();
+    const form = await this.getForm();
+    await form.submitForm();
+    const rawValues = toRaw(await this.getValues());
+    await this.state?.handleSubmit?.(rawValues);
 
-    return rawValues
+    return rawValues;
   }
 
   unmount() {
-    this.form?.resetForm?.()
+    this.form?.resetForm?.();
     // this.state = null;
-    this.latestSubmissionValues = null
-    this.isMounted = false
-    this.stateHandler.reset()
+    this.latestSubmissionValues = null;
+    this.isMounted = false;
+    this.stateHandler.reset();
   }
 
   updateSchema(schema: Partial<FormSchema>[]) {
-    const updated: Partial<FormSchema>[] = [...schema]
+    const updated: Partial<FormSchema>[] = [...schema];
     const hasField = updated.every(
-      item => Reflect.has(item, 'fieldName') && item.fieldName,
-    )
+      (item) => Reflect.has(item, 'fieldName') && item.fieldName,
+    );
 
     if (!hasField) {
       console.error(
         'All items in the schema array must have a valid `fieldName` property to be updated',
-      )
-      return
+      );
+      return;
     }
-    const currentSchema = [...(this.state?.schema ?? [])]
+    const currentSchema = [...(this.state?.schema ?? [])];
 
-    const updatedMap: Record<string, any> = {}
+    const updatedMap: Record<string, any> = {};
 
     updated.forEach((item) => {
       if (item.fieldName) {
-        updatedMap[item.fieldName] = item
+        updatedMap[item.fieldName] = item;
       }
-    })
+    });
 
     currentSchema.forEach((schema, index) => {
-      const updatedData = updatedMap[schema.fieldName]
+      const updatedData = updatedMap[schema.fieldName];
       if (updatedData) {
         currentSchema[index] = mergeWithArrayOverride(
           updatedData,
           schema,
-        ) as FormSchema
+        ) as FormSchema;
       }
-    })
-    this.setState({ schema: currentSchema })
+    });
+    this.setState({ schema: currentSchema });
   }
 
   async validate(opts?: Partial<ValidationOptions>) {
-    const form = await this.getForm()
+    const form = await this.getForm();
 
-    const validateResult = await form.validate(opts)
+    const validateResult = await form.validate(opts);
 
     if (Object.keys(validateResult?.errors ?? {}).length > 0) {
-      console.error('validate error', validateResult?.errors)
+      console.error('validate error', validateResult?.errors);
     }
-    return validateResult
+    return validateResult;
   }
 
   async validateAndSubmitForm() {
-    const form = await this.getForm()
-    const { valid } = await form.validate()
+    const form = await this.getForm();
+    const { valid } = await form.validate();
     if (!valid) {
-      return
+      return;
     }
-    return await this.submitForm()
+    return await this.submitForm();
   }
 
   async validateField(fieldName: string, opts?: Partial<ValidationOptions>) {
-    const form = await this.getForm()
-    const validateResult = await form.validateField(fieldName, opts)
+    const form = await this.getForm();
+    const validateResult = await form.validateField(fieldName, opts);
 
     if (Object.keys(validateResult?.errors ?? {}).length > 0) {
-      console.error('validate error', validateResult?.errors)
+      console.error('validate error', validateResult?.errors);
     }
-    return validateResult
+    return validateResult;
   }
 
   private async getForm() {
     if (!this.isMounted) {
       // 等待form挂载
-      await this.stateHandler.waitForCondition()
+      await this.stateHandler.waitForCondition();
     }
     if (!this.form?.meta) {
-      throw new Error('<KpuForm /> is not mounted')
+      throw new Error('<KpuForm /> is not mounted');
     }
-    return this.form
+    return this.form;
   }
 
   private handleRangeTimeValue = (originValues: Record<string, any>) => {
-    const values = { ...originValues }
-    const fieldMappingTime = this.state?.fieldMappingTime
+    const values = { ...originValues };
+    const fieldMappingTime = this.state?.fieldMappingTime;
 
     if (!fieldMappingTime || !Array.isArray(fieldMappingTime)) {
-      return values
+      return values;
     }
 
     fieldMappingTime.forEach(
       ([field, [startTimeKey, endTimeKey], format = 'YYYY-MM-DD']) => {
         if (startTimeKey && endTimeKey && values[field] === null) {
-          Reflect.deleteProperty(values, startTimeKey)
-          Reflect.deleteProperty(values, endTimeKey)
+          Reflect.deleteProperty(values, startTimeKey);
+          Reflect.deleteProperty(values, endTimeKey);
           // delete values[startTimeKey];
           // delete values[endTimeKey];
         }
 
         if (!values[field]) {
-          Reflect.deleteProperty(values, field)
+          Reflect.deleteProperty(values, field);
           // delete values[field];
-          return
+          return;
         }
 
-        const [startTime, endTime] = values[field]
+        const [startTime, endTime] = values[field];
         if (format === null) {
-         this.setValueByPath(values, startTimeKey, startTime)
-          this.setValueByPath(values, endTimeKey, endTime)
-          // values[startTimeKey] = startTime
-          // values[endTimeKey] = endTime
-        }
-        else if (isFunction(format)) {
-          this.setValueByPath(values,startTimeKey, format(startTime, startTimeKey))
-          this.setValueByPath(values,endTimeKey, format(endTime, endTimeKey))
-          // values[startTimeKey] = format(startTime, startTimeKey)
-          // values[endTimeKey] = format(endTime, endTimeKey)
-        }
-        else {
+          values[startTimeKey] = startTime;
+          values[endTimeKey] = endTime;
+        } else if (isFunction(format)) {
+          values[startTimeKey] = format(startTime, startTimeKey);
+          values[endTimeKey] = format(endTime, endTimeKey);
+        } else {
           const [startTimeFormat, endTimeFormat] = Array.isArray(format)
             ? format
-            : [format, format]
-          this.setValueByPath(values,startTimeKey, startTime ? formatDate(startTime, startTimeFormat) : undefined)
-          this.setValueByPath(values,endTimeKey, endTime ? formatDate(endTime, endTimeFormat) : undefined)
-          // values[startTimeKey] = startTime
-          //   ? formatDate(startTime, startTimeFormat)
-          //   : undefined
-          // values[endTimeKey] = endTime
-          //   ? formatDate(endTime, endTimeFormat)
-          //   : undefined
+            : [format, format];
+
+          values[startTimeKey] = startTime
+            ? formatDate(startTime, startTimeFormat)
+            : undefined;
+          values[endTimeKey] = endTime
+            ? formatDate(endTime, endTimeFormat)
+            : undefined;
         }
         // delete values[field];
-        Reflect.deleteProperty(values, field)
+        Reflect.deleteProperty(values, field);
       },
-    )
-    return values
-  }
-  private setValueByPath(obj: Record<string, any>, path:string, value:any) {
-    const keys = path.split('.');
-    let current = obj;
-    for (let i = 0; i < keys.length - 1; i++) {
-      const key = keys[i];
-      if (!current[key]) current[key] = {}; // 如果不存在，则初始化为空对象
-      current = current[key];
-    }
-    current[keys[keys.length - 1]] = value; // 设置最终值
-  }
+    );
+    return values;
+  };
+
   private updateState() {
-    const currentSchema = this.state?.schema ?? []
-    const prevSchema = this.prevState?.schema ?? []
+    const currentSchema = this.state?.schema ?? [];
+    const prevSchema = this.prevState?.schema ?? [];
     // 进行了删除schema操作
     if (currentSchema.length < prevSchema.length) {
       const currentFields = new Set(
-        currentSchema.map(item => item.fieldName),
-      )
+        currentSchema.map((item) => item.fieldName),
+      );
       const deletedSchema = prevSchema.filter(
-        item => !currentFields.has(item.fieldName),
-      )
+        (item) => !currentFields.has(item.fieldName),
+      );
       for (const schema of deletedSchema) {
-        this.form?.setFieldValue?.(schema.fieldName, undefined)
+        this.form?.setFieldValue?.(schema.fieldName, undefined);
       }
     }
   }

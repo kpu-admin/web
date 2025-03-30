@@ -1,11 +1,12 @@
-export { setupKpuForm } from './config'
+export { setupKpuForm } from './config';
 
 export type {
   BaseFormComponentType,
   ExtendedFormApi,
   KpuFormProps,
   FormSchema as KpuFormSchema,
-} from './types'
+} from './types';
 
-export * from './use-kpu-form'
-export * as z from 'zod'
+export * from './use-kpu-form';
+// export { default as KpuForm } from './kpu-form.vue';
+export * as z from 'zod';

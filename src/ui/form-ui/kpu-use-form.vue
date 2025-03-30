@@ -1,85 +1,93 @@
 <script setup lang="ts">
-import type { ExtendedFormApi, KpuFormProps } from './types'
-
-import { useDebounceFn } from '@vueuse/core'
-import { cloneDeep } from 'es-toolkit'
+import type { ExtendedFormApi, KpuFormProps } from './types';
 
 // import { toRaw, watch } from 'vue';
-import { nextTick, onMounted, watch } from 'vue'
+import { nextTick, onMounted, watch } from 'vue';
 
-import FormActions from './components/form-actions.vue'
+import { cloneDeep } from '@/utils';
+
+import { useDebounceFn } from '@vueuse/core';
+
+import FormActions from './components/form-actions.vue';
 import {
   COMPONENT_BIND_EVENT_MAP,
   COMPONENT_MAP,
   DEFAULT_FORM_COMMON_CONFIG,
-} from './config'
-import { Form } from './form-render'
-import { provideFormProps, useFormInitial } from './use-form-context'
+} from './config';
+import { Form } from './form-render';
+import {
+  provideComponentRefMap,
+  provideFormProps,
+  useFormInitial,
+} from './use-form-context';
 // 通过 extends 会导致热更新卡死，所以重复写了一遍
 interface Props extends KpuFormProps {
-  formApi: ExtendedFormApi
+  formApi: ExtendedFormApi;
 }
 
-const props = defineProps<Props>()
+const props = defineProps<Props>();
 
-const state = props.formApi?.useStore?.()
+const state = props.formApi?.useStore?.();
 
-const forward = useForwardPriorityValues(props, state)
+const forward = useForwardPriorityValues(props, state);
 
-const { delegatedSlots, form } = useFormInitial(forward)
+const componentRefMap = new Map<string, unknown>();
 
-provideFormProps([forward, form])
+const { delegatedSlots, form } = useFormInitial(forward);
 
-props.formApi?.mount?.(form)
+provideFormProps([forward, form]);
+provideComponentRefMap(componentRefMap);
 
-function handleUpdateCollapsed(value: boolean) {
-  props.formApi?.setState({ collapsed: !!value })
-}
+props.formApi?.mount?.(form, componentRefMap);
+
+const handleUpdateCollapsed = (value: boolean) => {
+  props.formApi?.setState({ collapsed: !!value });
+};
 
 function handleKeyDownEnter(event: KeyboardEvent) {
   if (!state.value.submitOnEnter || !forward.value.formApi?.isMounted) {
-    return
+    return;
   }
   // 如果是 textarea 不阻止默认行为，否则会导致无法换行。
   // 跳过 textarea 的回车提交处理
   if (event.target instanceof HTMLTextAreaElement) {
-    return
+    return;
   }
-  event.preventDefault()
+  event.preventDefault();
 
-  forward.value.formApi.validateAndSubmitForm()
+  forward.value.formApi.validateAndSubmitForm();
 }
 
 const handleValuesChangeDebounced = useDebounceFn(async () => {
   forward.value.handleValuesChange?.(
     cloneDeep(await forward.value.formApi.getValues()),
-  )
-  state.value.submitOnChange && forward.value.formApi?.validateAndSubmitForm()
-}, 300)
+  );
+  state.value.submitOnChange && forward.value.formApi?.validateAndSubmitForm();
+}, 300);
 
 onMounted(async () => {
   // 只在挂载后开始监听，form.values会有一个初始化的过程
-  await nextTick()
-  watch(() => form.values, handleValuesChangeDebounced, { deep: true })
-})
+  await nextTick();
+  watch(() => form.values, handleValuesChangeDebounced, { deep: true });
+});
 </script>
 
 <template>
   <Form
+    @keydown.enter="handleKeyDownEnter"
     v-bind="forward"
     :collapsed="state.collapsed"
     :component-bind-event-map="COMPONENT_BIND_EVENT_MAP"
     :component-map="COMPONENT_MAP"
     :form="form"
     :global-common-config="DEFAULT_FORM_COMMON_CONFIG"
-    @keydown.enter="handleKeyDownEnter"
   >
     <template
       v-for="slotName in delegatedSlots"
       :key="slotName"
       #[slotName]="slotProps"
     >
-      <slot :name="slotName" v-bind="slotProps" />
+      <slot :name="slotName" v-bind="slotProps"></slot>
     </template>
     <template #default="slotProps">
       <slot v-bind="slotProps">
@@ -89,16 +97,16 @@ onMounted(async () => {
           @update:model-value="handleUpdateCollapsed"
         >
           <template #reset-before="resetSlotProps">
-            <slot name="reset-before" v-bind="resetSlotProps" />
+            <slot name="reset-before" v-bind="resetSlotProps"></slot>
           </template>
           <template #submit-before="submitSlotProps">
-            <slot name="submit-before" v-bind="submitSlotProps" />
+            <slot name="submit-before" v-bind="submitSlotProps"></slot>
           </template>
           <template #expand-before="expandBeforeSlotProps">
-            <slot name="expand-before" v-bind="expandBeforeSlotProps" />
+            <slot name="expand-before" v-bind="expandBeforeSlotProps"></slot>
           </template>
           <template #expand-after="expandAfterSlotProps">
-            <slot name="expand-after" v-bind="expandAfterSlotProps" />
+            <slot name="expand-after" v-bind="expandAfterSlotProps"></slot>
           </template>
         </FormActions>
       </slot>

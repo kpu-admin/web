@@ -38,7 +38,7 @@ withDefaults(
 </script>
 
 <template>
-  <ElCard class="top-card" :class="`top-card-${background}`" shadow="hover">
+  <ACard class="top-card" :class="`top-card-${background}`" shadow="hover">
     {{ title }}
     <slot v-if="$slots.tag" name="tag" />
     <p>
@@ -62,7 +62,7 @@ withDefaults(
       <span>{{ percentage }}</span>
     </div>
     <slot v-if="$slots.chart" name="chart" />
-  </ElCard>
+  </ACard>
 </template>
 
 <style scoped>
@@ -70,8 +70,8 @@ withDefaults(
   position: relative;
   height: 168px !important;
 
-  &.el-card,
-  .el-card {
+  &.ant-card,
+  .ant-card {
     margin-bottom: 1.25rem;
   }
 

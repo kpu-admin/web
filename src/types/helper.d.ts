@@ -31,6 +31,8 @@ type AnyPromiseFunction<T extends any[] = any[], R = void> = (
  * 任意类型的普通函数
  */
 type AnyNormalFunction<T extends any[] = any[], R = void> = (...arg: T) => R
+type Fn<T = any, R = T> =
+  (...arg: T[]) => R
 
 /**
  * 任意类型的函数
@@ -120,6 +122,7 @@ export type {
   DeepPartial,
   DeepReadonly,
   EmitType,
+  Fn,
   IntervalHandle,
   MaybeComputedRef,
   MaybePromise,

@@ -56,10 +56,10 @@ const [Modal, modalApi] = useKpuModal({
     const { valid } = await formApi.validate()
     if (valid) {
       const data: any = await formApi.getValues()
-      formApi.setState({
-        // loading: true,
-        confirmLoading: true,
-      })
+      // formApi.setState({
+      //   loading: true,
+      //   // confirmLoading: true,
+      // })
       try {
         switch (type.value) {
           case ActionEnum.EDIT: {
@@ -77,10 +77,10 @@ const [Modal, modalApi] = useKpuModal({
         modalApi.close()
       }
       finally {
-        formApi.setState({
-          // loading: true,
-          confirmLoading: true,
-        })
+        // formApi.setState({
+        //   loading: true,
+        //   // confirmLoading: true,
+        // })
       }
     }
   },
