@@ -1,0 +1,33 @@
+{
+  "apiController": "",
+  "apiList": "",
+  "apiRequestMethod": "",
+  "apiSpringApplicationName": "",
+  "applicationId": "",
+  "code": "",
+  "component": "",
+  "customClass": "",
+  "dataScope": "",
+  "describe": "",
+  "fieldIsEdit": "",
+  "fieldIsSecret": "",
+  "icon": "",
+  "id": "",
+  "isDef": "",
+  "isGeneral": "",
+  "isHidden": "",
+  "metaJson": "",
+  "name": "",
+  "openWith": "",
+  "parentId": "",
+  "parentName": "",
+  "path": "",
+  "redirect": "",
+  "resourceType": "",
+  "sortValue": "",
+  "state": "",
+  "subGroup": "",
+  "table": {
+    "title": ""
+  }
+}

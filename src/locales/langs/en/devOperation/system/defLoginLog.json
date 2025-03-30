@@ -1,0 +1,20 @@
+{
+  "browser": "",
+  "browserVersion": "",
+  "description": "",
+  "employeeId": "",
+  "id": "",
+  "location": "",
+  "loginDate": "",
+  "nickName": "",
+  "operatingSystem": "",
+  "requestIp": "",
+  "status": "",
+  "table": {
+    "title": ""
+  },
+  "tenantId": "",
+  "ua": "",
+  "userId": "",
+  "username": ""
+}

@@ -1,0 +1,26 @@
+{
+  "ddOpenId": "",
+  "education": "",
+  "email": "",
+  "id": "",
+  "idCard": "",
+  "lastLoginTime": "",
+  "locked": "",
+  "mobile": "",
+  "nation": "",
+  "nickName": "",
+  "password": "",
+  "passwordErrorLastTime": "",
+  "passwordErrorNum": "",
+  "passwordExpireTime": "",
+  "readonly": "",
+  "salt": "",
+  "sex": "",
+  "state": "",
+  "table": {
+    "title": ""
+  },
+  "username": "",
+  "workDescribe": "",
+  "wxOpenId": ""
+}
