@@ -293,7 +293,7 @@ const getAppendTo = computed(() => {
 
       <KpuIconButton
         v-if="fullscreenButton"
-        class="absolute right-10 top-3 size-6 flex-center rounded-sm px-1 text-lg text-foreground/80 opacity-70 transition-opacity hidden disabled:pointer-events-none sm:block hover:bg-accent hover:text-accent-foreground hover:opacity-100 focus:outline-none"
+        class="absolute right-10 top-3 hidden size-6 flex-center rounded-sm px-1 text-lg text-foreground/80 opacity-70 transition-opacity disabled:pointer-events-none sm:block hover:bg-accent hover:text-accent-foreground hover:opacity-100 focus:outline-none"
         @click="handleFullscreen"
       >
         <Shrink v-if="fullscreen" class="size-3.5" />

@@ -132,7 +132,7 @@ watch(() => containerRef.value, (val) => {
               <div class="flex-1 truncate pe-4 text-sm group-hover:[mask-image:linear-gradient(90deg,#000_calc(100%-80px),transparent)]">
                 {{ item.title }}
               </div>
-              <div class="absolute right-2 h-5 w-5 rounded-full text-secondary-foreground hidden group-hover:flex-center hover:bg-secondary hover:ring-1">
+              <div class="absolute right-2 hidden h-5 w-5 rounded-full text-secondary-foreground group-hover:flex-center hover:bg-secondary hover:ring-1">
                 <KpuIcon name="i-ep:delete" :size="14" @click.stop="onRemove(index)" />
               </div>
             </div>
