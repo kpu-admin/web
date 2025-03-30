@@ -7,7 +7,7 @@ import {
   presetAttributify,
   presetIcons,
   presetTypography,
-  presetUno,
+  presetWind3,
   transformerCompileClass,
   transformerDirectives,
   transformerVariantGroup,
@@ -109,8 +109,8 @@ export default defineConfig<Theme>({
     },
   },
   presets: [
-    presetUno(),
-    await presetAnimations() as PresetOrFactoryAwaitable<Theme>,
+    presetWind3(),
+    presetAnimations(),
     presetAttributify(),
     presetIcons({
       extraProperties: {

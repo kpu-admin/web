@@ -35,6 +35,7 @@ const globalSettingsDefault: RecursiveRequired<Settings.all> = {
   },
   layout: {
     widthMode: 'adaption',
+    widthModeScope: 'outer',
     enableMobileAdaptation: false,
   },
   menu: {

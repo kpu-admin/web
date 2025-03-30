@@ -107,8 +107,8 @@ function iconName(isActive: boolean, icon?: string, activeIcon?: string) {
 </template>
 
 <style scoped>
-[data-app-width-mode="center"],
-[data-app-width-mode="center-max-width"] {
+[data-app-width-mode-scope="outer"][data-app-width-mode="center"],
+[data-app-width-mode-scope="outer"][data-app-width-mode="center-max-width"] {
   header {
     width: var(--g-app-width);
     max-width: 100%;

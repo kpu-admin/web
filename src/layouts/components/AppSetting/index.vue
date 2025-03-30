@@ -201,6 +201,24 @@ function handleCopy() {
           </div>
         </KpuTooltip>
       </div>
+      <div class="setting-item">
+        <div class="label">
+          作用范围
+        </div>
+        <div class="flex-center-start gap-1">
+          <KpuButton
+            v-for="(item, index) in [{
+              label: '外层',
+              value: 'outer',
+            }, {
+              label: '内层',
+              value: 'inner',
+            }]" :key="index" :variant="settingsStore.settings.layout.widthModeScope === item.value ? 'default' : 'outline'" size="sm" class="w-12" @click="settingsStore.settings.layout.widthModeScope = (item.value as any)"
+          >
+            {{ item.label }}
+          </KpuButton>
+        </div>
+      </div>
     </div>
     <div>
       <KpuDivider>页面切换动画</KpuDivider>

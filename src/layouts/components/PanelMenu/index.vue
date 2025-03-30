@@ -1,5 +1,6 @@
 <script setup lang="ts">
 import type { MenuInjection, MenuProps } from './types'
+import { cn } from '@/utils'
 import Item from './item.vue'
 import SubMenu from './sub.vue'
 import { rootMenuInjectionKey } from './types'
@@ -156,10 +157,10 @@ provide(rootMenuInjectionKey, reactive({
 
 <template>
   <div
-    class="h-full w-full flex flex-col of-hidden transition-all" :class="{
-      'flex-row! w-auto!': props.mode === 'horizontal',
+    :class="cn('h-full w-full flex flex-col of-hidden transition-all', {
+      'flex-row w-auto': props.mode === 'horizontal',
       'py-1': props.mode === 'vertical',
-    }"
+    })"
   >
     <template v-for="item in menu" :key="item.path ?? JSON.stringify(item)">
       <template v-if="item.meta?.menu !== false">

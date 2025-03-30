@@ -88,8 +88,8 @@ watch(scrollTop, (val, oldVal) => {
   &.topbar-sticky {
     position: fixed;
 
-    [data-app-width-mode="center"] &,
-    [data-app-width-mode="center-max-width"] & {
+    [data-app-width-mode-scope="outer"][data-app-width-mode="center"] &,
+    [data-app-width-mode-scope="outer"][data-app-width-mode="center-max-width"] & {
       width: 100%;
     }
   }
