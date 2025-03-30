@@ -14,20 +14,6 @@ export default function useTabbar() {
     return settingsStore.settings.tabbar.mergeTabsBy === 'activeMenu' ? (route.meta.activeMenu ?? route.fullPath) : route.fullPath
   }
 
-  function open(to: RouteLocationRaw) {
-    const index = tabbarStore.list.findIndex(item => item.tabId === getId())
-    tabbarStore.$patch({
-      leaveIndex: index,
-    })
-    router.push(to)
-  }
-
-  function go(delta: number) {
-    const tabId = getId()
-    router.go(delta)
-    tabbarStore.remove(tabId)
-  }
-
   function close(to: RouteLocationRaw) {
     const tabId = getId()
     router.push(to).then(() => {
@@ -164,8 +150,6 @@ export default function useTabbar() {
 
   return {
     getId,
-    open,
-    go,
     close,
     closeById,
     closeOtherSide,

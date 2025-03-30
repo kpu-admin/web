@@ -185,7 +185,9 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT
             <IframeView v-show="isIframe && !isLink" />
             <LinkView v-if="isLink" />
           </div>
-          <KpuCopyright />
+          <div class="copyright">
+            <KpuCopyright />
+          </div>
         </div>
       </div>
     </div>
@@ -205,27 +207,29 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT
 </template>
 
 <style scoped>
-[data-app-width-mode="adaption"] {
-  #app-main {
-    width: 100%;
+[data-app-width-mode-scope="outer"] {
+  &[data-app-width-mode="adaption"]:not([data-mode="mobile"]) {
+    #app-main {
+      width: 100%;
+    }
   }
-}
 
-[data-app-width-mode="adaption-min-width"] {
-  #app-main {
-    width: max(var(--g-app-width), 100%);
+  &[data-app-width-mode="adaption-min-width"]:not([data-mode="mobile"]) {
+    #app-main {
+      width: max(var(--g-app-width), 100%);
+    }
   }
-}
 
-[data-app-width-mode="center"] {
-  #app-main {
-    width: var(--g-app-width);
+  &[data-app-width-mode="center"]:not([data-mode="mobile"]) {
+    #app-main {
+      width: var(--g-app-width);
+    }
   }
-}
 
-[data-app-width-mode="center-max-width"] {
-  #app-main {
-    width: min(var(--g-app-width), 100%);
+  &[data-app-width-mode="center-max-width"]:not([data-mode="mobile"]) {
+    #app-main {
+      width: min(var(--g-app-width), 100%);
+    }
   }
 }
 
@@ -324,9 +328,27 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT
     .main {
       position: relative;
       flex: auto;
+      width: 100%;
       height: 100%;
-      margin: var(--g-topbar-actual-height) 0 0;
+      margin: var(--g-topbar-actual-height) auto 0;
       overflow: hidden;
+      box-shadow: -1px 0 hsl(var(--border)), 1px 0 hsl(var(--border));
+
+      [data-app-width-mode-scope="inner"][data-app-width-mode="adaption"]:not([data-mode="mobile"]) & {
+        width: 100%;
+      }
+
+      [data-app-width-mode-scope="inner"][data-app-width-mode="adaption-min-width"]:not([data-mode="mobile"]) & {
+        width: max(var(--g-app-width), 100%);
+      }
+
+      [data-app-width-mode-scope="inner"][data-app-width-mode="center"]:not([data-mode="mobile"]) & {
+        width: var(--g-app-width);
+      }
+
+      [data-app-width-mode-scope="inner"][data-app-width-mode="center-max-width"]:not([data-mode="mobile"]) & {
+        width: min(var(--g-app-width), 100%);
+      }
 
       .exit-main-page-maximize {
         --uno: bg-primary text-primary-foreground;
@@ -353,6 +375,28 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT
           bottom: 16px;
           left: 16px;
         }
+      }
+    }
+
+    .copyright {
+      width: 100%;
+      margin-inline: auto;
+      box-shadow: -1px 0 hsl(var(--border)), 1px 0 hsl(var(--border));
+
+      [data-app-width-mode-scope="inner"][data-app-width-mode="adaption"]:not([data-mode="mobile"]) & {
+        width: 100%;
+      }
+
+      [data-app-width-mode-scope="inner"][data-app-width-mode="adaption-min-width"]:not([data-mode="mobile"]) & {
+        width: max(var(--g-app-width), 100%);
+      }
+
+      [data-app-width-mode-scope="inner"][data-app-width-mode="center"]:not([data-mode="mobile"]) & {
+        width: var(--g-app-width);
+      }
+
+      [data-app-width-mode-scope="inner"][data-app-width-mode="center-max-width"]:not([data-mode="mobile"]) & {
+        width: min(var(--g-app-width), 100%);
       }
     }
   }

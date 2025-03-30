@@ -10,7 +10,6 @@ import { get } from 'lodash-es'
 import FormMode from './components/FormMode/index.vue'
 
 const router = useRouter()
-const tabbar = useTabbar()
 const settingsStore = useSettingsStore()
 const { pagination, getParams, onSizeChange, onCurrentChange } = usePagination()
 
@@ -79,7 +78,7 @@ function currentChange(page = 1) {
 function onAdd() {
   if (data.value.formMode === 'router') {
     if (settingsStore.settings.tabbar.enable && settingsStore.settings.tabbar.mergeTabsBy !== 'activeMenu') {
-      tabbar.open({
+      router.push({
         name: 'standardModuleExampleCreate',
         params: {
           type: 'add',
@@ -105,7 +104,7 @@ function onAdd() {
 function onEdit(row: any) {
   if (data.value.formMode === 'router') {
     if (settingsStore.settings.tabbar.enable && settingsStore.settings.tabbar.mergeTabsBy !== 'activeMenu') {
-      tabbar.open({
+      router.push({
         name: 'standardModuleExampleEdit',
         params: {
           id: row.id,

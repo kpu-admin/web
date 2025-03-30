@@ -149,6 +149,12 @@ declare namespace Settings {
      */
     widthMode?: 'adaption' | 'adaption-min-width' | 'center' | 'center-max-width'
     /**
+     * 作用范围
+     * @默认值 `'outer'` 外部
+     * @可选值 `'inner'` 内部
+     */
+    widthModeScope?: 'outer' | 'inner'
+    /**
      * 是否开启移动端适配，开启后当页面宽度小于 1024px 时自动切换为移动端展示
      * @默认值 `false`
      */

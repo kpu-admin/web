@@ -91,6 +91,11 @@ const useSettingsStore = defineStore(
     }, {
       immediate: true,
     })
+    watch(() => settings.value.layout.widthModeScope, (val) => {
+      document.body.setAttribute('data-app-width-mode-scope', val)
+    }, {
+      immediate: true,
+    })
 
     watch(() => settings.value.app.direction, (val) => {
       document.documentElement.setAttribute('dir', val)
