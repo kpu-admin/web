@@ -9,9 +9,9 @@ import { createCrudOptions, frontRules } from './data/crud.tsx'
 
 const formRef = ref()
 const route = useRoute()
+const router = useRouter()
 const type = ref(ActionEnum.ADD)
 const typeFrom = ref(ActionEnum.ADD)
-const tabbar = useTabbar()
 const loading = ref(false)
 const { createMessage } = useMessage()
 const { crudBinding, appendCrudOptions } = useFs({
@@ -23,7 +23,9 @@ async function handleSubmit() {
     await formRef.value.submit()
 
     createMessage.success($t(`common.tips.${type.value}Success`))
-    tabbar.closeById()
+    router.replace({
+      name: '消息中_消息管理_消息管理',
+    })
   }
   finally {
     loading.value = false
@@ -72,7 +74,7 @@ onMounted(() => {
     <div class="p-5">
       <FsForm ref="formRef" v-bind="crudBinding[`${typeFrom}Form`]" />
 
-      <div class="mt-2.5">
+      <div v-if="type !== ActionEnum.VIEW" class="mt-2.5">
         <AButton :loading="loading" @click="handleSubmit">
           立即发送
         </AButton>

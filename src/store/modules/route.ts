@@ -1,6 +1,6 @@
 import type { Route } from '#/global'
+import type { VisibleResourceVO } from '@/api/modules/model/oauthModel.ts'
 import type { RouteRecordRaw, RouterMatcher } from 'vue-router'
-import { requestClient } from '@/api'
 import { systemRoutes as systemRoutesRaw } from '@/router/routes'
 import { cloneDeep } from 'es-toolkit'
 import { createRouterMatcher } from 'vue-router'
@@ -174,14 +174,9 @@ const useRouteStore = defineStore(
     }
 
     // 生成路由（后端获取）
-    async function generateRoutesAtBack() {
-      const res = await requestClient.get<any>('/anyone/visible/resource', {
-        params: {
-          type: 'KPU_WEB_PRO_KPU',
-        },
-      })
+    async function generateRoutesAtBack(visibleResource: VisibleResourceVO) {
       // 设置 routes 数据
-      routesRaw.value = convertSingleRoutes(sortRoutes(formatBackRoutes(res.routerList) as any))
+      routesRaw.value = convertSingleRoutes(sortRoutes(formatBackRoutes(visibleResource.routerList) as any))
       // 创建路由匹配器
       const routes: RouteRecordRaw[] = []
       routesRaw.value.forEach((route) => {

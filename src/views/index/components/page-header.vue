@@ -40,7 +40,7 @@ function handleTips() {
 
 <template>
   <ACard class="page-header" shadow="never">
-    <AAvatar class="page-header-avatar" :src="userStore.avatar" />
+    <AAvatar class="page-header-avatar" :src="userStore.userInfo.avatar" />
     <div class="page-header-tip">
       <p class="page-header-tip-title">
         {{ handleTips() }}

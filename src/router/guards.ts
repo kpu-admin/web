@@ -1,3 +1,4 @@
+import type { VisibleResourceVO } from '@/api/modules/model/oauthModel.ts'
 import type { Router, RouteRecordRaw } from 'vue-router'
 import useFavoritesStore from '@/store/modules/favorites.ts'
 import useIframeStore from '@/store/modules/iframe.ts'
@@ -8,7 +9,7 @@ import useSettingsStore from '@/store/modules/settings'
 import useTabbarStore from '@/store/modules/tabbar.ts'
 import useUserStore from '@/store/modules/user'
 import { useNProgress } from '@vueuse/integrations/useNProgress'
-import { asyncRoutes, asyncRoutesByFilesystem } from './routes'
+import { asyncRoutes } from './routes'
 import '@/assets/styles/nprogress.css'
 
 function setupRoutes(router: Router) {
@@ -52,8 +53,12 @@ function setupRoutes(router: Router) {
       }
       else {
         try {
+          await userStore.getUserInfo()
           // 获取用户权限
-          settingsStore.settings.app.enablePermission && await userStore.getPermissions()
+          let visibleResource = {} as VisibleResourceVO
+          if (settingsStore.settings.app.enablePermission) {
+            visibleResource = await userStore.getPermissions()
+          }
 
           // 获取用户偏好设置
           settingsStore.settings.userPreferences.enable && await userStore.getPreferences()
@@ -62,24 +67,13 @@ function setupRoutes(router: Router) {
           // 复原收藏夹
           settingsStore.settings.toolbar.favorites && await favoritesStore.recoveryStorage()
           // 生成动态路由
+          // console.log('@@', settingsStore.settings.app.routeBaseOn)
           switch (settingsStore.settings.app.routeBaseOn) {
             case 'frontend':
               routeStore.generateRoutesAtFront(asyncRoutes)
               break
             case 'backend':
-              await routeStore.generateRoutesAtBack()
-              break
-            case 'filesystem':
-              routeStore.generateRoutesAtFilesystem(asyncRoutesByFilesystem)
-              // 文件系统生成的路由，需要手动生成导航数据
-              switch (settingsStore.settings.menu.baseOn) {
-                case 'frontend':
-                  menuStore.generateMenusAtFront()
-                  break
-                case 'backend':
-                  await menuStore.generateMenusAtBack()
-                  break
-              }
+              await routeStore.generateRoutesAtBack(visibleResource)
               break
           }
           // 注册并记录路由数据

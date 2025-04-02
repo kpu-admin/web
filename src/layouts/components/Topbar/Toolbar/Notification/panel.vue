@@ -40,7 +40,7 @@ const [KpuModal, modalApi] = useKpuModal({
                 你收到了 8 份日报
               </div>
               <div class="date">
-                2020-10-10 10:00:00
+                2024-10-10 10:00:00
               </div>
             </div>
           </div>
@@ -53,7 +53,7 @@ const [KpuModal, modalApi] = useKpuModal({
                 你收到了 3 位同事的好友申请，请及时处理
               </div>
               <div class="date">
-                2020-10-10 10:00:00
+                2024-10-10 10:00:00
               </div>
             </div>
           </div>
@@ -66,7 +66,7 @@ const [KpuModal, modalApi] = useKpuModal({
                 你有 3 份合同待审批
               </div>
               <div class="date">
-                2020-10-10 10:00:00
+                2024-10-10 10:00:00
               </div>
             </div>
           </div>
@@ -79,7 +79,7 @@ const [KpuModal, modalApi] = useKpuModal({
                 你收到了 8 份日报
               </div>
               <div class="date">
-                2020-10-10 10:00:00
+                2024-10-10 10:00:00
               </div>
             </div>
           </div>
@@ -92,7 +92,7 @@ const [KpuModal, modalApi] = useKpuModal({
                 你收到了 3 位同事的好友申请，请及时处理
               </div>
               <div class="date">
-                2020-10-10 10:00:00
+                2024-10-10 10:00:00
               </div>
             </div>
           </div>

@@ -1,5 +1,7 @@
 import type { Settings } from '#/global'
+import type { DefUserInfoResultVO, VisibleResourceVO } from '@/api/modules/model/oauthModel.ts'
 import { requestClient } from '@/api'
+import { findResourceList, getUserInfoById } from '@/api/modules/user.ts'
 import router from '@/router'
 import settingsDefault from '@/settings'
 import useMenuStore from '@/store/modules/menu'
@@ -21,10 +23,12 @@ const useUserStore = defineStore(
     const menuStore = useMenuStore()
 
     const account = ref(storage.local.get('account') ?? '')
-    const avatar = ref(storage.local.get('avatar') ?? '')
+    // const avatar = ref(storage.local.get('avatar') ?? '')
     const token = ref(storage.local.get('token') ?? '')
+    const userInfo = ref<DefUserInfoResultVO>(JSON.parse(storage.local.get('userInfo') as string) || {} as DefUserInfoResultVO)
     const permissions = ref<string[]>([])
     // const roles = ref<string[]>([])
+    const visibleResource = ref<VisibleResourceVO>({} as VisibleResourceVO)
     const isLogin = computed(() => {
       if (token.value) {
         return true
@@ -45,11 +49,9 @@ const useUserStore = defineStore(
       })
       storage.local.set('account', data.username)
       storage.local.set('token', res.token)
-      storage.local.set('avatar', res.avatar)
       storage.local.set('refreshToken', res.refreshToken)
       account.value = data.username
       token.value = res.token
-      avatar.value = res.avatar
     }
     // 登出
     async function logout(redirect = router.currentRoute.value.fullPath) {
@@ -84,24 +86,30 @@ const useUserStore = defineStore(
     }
     function logoutCleanStatus() {
       storage.local.remove('account')
-      storage.local.remove('avatar')
+      storage.local.remove('userInfo')
 
       account.value = ''
-      avatar.value = ''
+      userInfo.value = {} as DefUserInfoResultVO
       permissions.value = []
       settingsStore.updateSettings({}, true)
       tabbarStore.clean()
       routeStore.removeRoutes()
       menuStore.setActived(0)
     }
+
+    // 刷新时加载用户信息
+    async function getUserInfo() {
+      const res = await getUserInfoById()
+      userInfo.value = res
+      return res
+    }
     // 获取我的权限
     async function getPermissions() {
       // 通过 mock 获取权限
-      const data = await requestClient.get<string[]>('/anyone/findVisibleResource', {
-      })
-      permissions.value = data
-      // roles.value = data.roleList
-      return permissions.value
+      const res = await findResourceList()
+      visibleResource.value = res
+      permissions.value = res.resourceList
+      return res
     }
     // 修改密码
     async function editPassword(data: {
@@ -262,13 +270,16 @@ const useUserStore = defineStore(
 
     return {
       account,
-      avatar,
+      // avatar,
       token,
+      userInfo,
       permissions,
+      visibleResource,
       isLogin,
       login,
       logout,
       requestLogout,
+      getUserInfo,
       getPermissions,
       editPassword,
       preferences,

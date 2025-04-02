@@ -54,7 +54,7 @@ const globalSettings: Settings.all = {
   },
   copyright: {
     enable: true,
-    dates: '2020-present',
+    dates: '2025-present',
     company: 'kpu-admin',
     website: 'https://kpu-admin.kpu.me',
   },

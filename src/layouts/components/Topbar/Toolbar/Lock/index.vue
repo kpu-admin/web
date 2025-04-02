@@ -152,7 +152,7 @@ onUnmounted(() => {
 
         <div class="screen-lock-content">
           <div class="screen-lock-content-title">
-            <img width="180px" :src="userStore.avatar" alt="">
+            <img width="180px" :src="userStore.userInfo.avatar" alt="">
             <KpuIcon name="i-ri:lock-2-line" class="i-ri:lock-2-line" />
             {{ $t(title) }} {{ $t('屏幕已锁定') }}
           </div>

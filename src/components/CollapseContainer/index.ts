@@ -1,4 +1,4 @@
-import collapseContainer from './src/collapse/CollapseContainer.vue'
+import collapseContainer from './src/CollapseContainer.vue'
 
 export const CollapseContainer = collapseContainer
 

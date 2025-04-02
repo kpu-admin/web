@@ -51,6 +51,14 @@ const systemRoutes: RouteRecordRaw[] = [
           breadcrumb: false,
         },
       },
+      {
+        path: 'personal',
+        name: 'personal',
+        component: () => import('@/views/personal/index.vue'),
+        meta: {
+          title: 'route.personal.setting',
+        },
+      },
     ],
   },
 ]

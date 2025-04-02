@@ -12,7 +12,7 @@ const settingsStore = useSettingsStore()
 const userStore = useUserStore()
 const { generateI18nTitle } = useMenu()
 // const isProfileShow = ref(false)
-const [KpuModal, modalApi] = useKpuModal({
+const [KpuModal, _modalApi] = useKpuModal({
 })
 </script>
 
@@ -21,7 +21,7 @@ const [KpuModal, modalApi] = useKpuModal({
     align="end" :items="[
       [
         { label: generateI18nTitle(settingsStore.settings.home.title), icon: 'i-mdi:home', handle: () => router.push({ path: settingsStore.settings.home.fullPath }), hide: !settingsStore.settings.home.enable },
-        { label: $t('app.preferences'), icon: 'i-mdi:account', handle: () => modalApi.open() },
+        { label: $t('app.profile'), icon: 'i-mdi:account', handle: () => router.push({ name: 'personal' }) },
       ],
       [
         { label: $t('app.hotkeys.title'), icon: 'i-mdi:keyboard', handle: () => eventBus.emit('global-hotkeys-intro-toggle'), hide: settingsStore.mode !== 'pc' },
@@ -37,7 +37,7 @@ const [KpuModal, modalApi] = useKpuModal({
           {{ $t('app.currentAccount') }}
         </div>
         <div class="flex-center-start gap-2">
-          <KpuAvatar :src="userStore.avatar" :fallback="userStore.account.slice(0, 5)" shape="square" />
+          <KpuAvatar :src="userStore.userInfo.avatar" :fallback="userStore.account.slice(0, 5)" shape="square" />
           <div class="space-y-1">
             <div class="text-base lh-none">
               {{ userStore.account }}
@@ -50,7 +50,7 @@ const [KpuModal, modalApi] = useKpuModal({
       </div>
     </template>
     <KpuButton variant="ghost" class="h-9 flex-center gap-1 px-2">
-      <KpuAvatar :src="userStore.avatar" class="size-6">
+      <KpuAvatar :src="userStore.userInfo.avatar" class="size-6">
         <KpuIcon name="i-carbon:user-avatar-filled-alt" :size="24" class="text-secondary-foreground/50" />
       </KpuAvatar>
       <template v-if="settingsStore.mode === 'pc'">

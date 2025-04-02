@@ -254,7 +254,7 @@ function install(app: any, options: any = {}) {
         if (isFunction(param)) {
           params = await param()
         }
-        return await uploadFile({ file, ...params }, {
+        return (await uploadFile({ file, ...params }, {
           method: 'post',
           headers: {
             'Content-Type': 'multipart/form-data',
@@ -265,7 +265,7 @@ function install(app: any, options: any = {}) {
               percent: Math.round(progressEvent.loaded / (progressEvent.total || 100) * 100),
             })
           },
-        })
+        })).id
       },
       successHandle(ret: any) {
         // 上传完成后的结果处理， 此处应返回格式为{url:xxx,key:xxx}

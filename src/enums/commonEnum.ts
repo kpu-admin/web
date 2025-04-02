@@ -103,3 +103,14 @@ export enum DictEnum {
 
   TENANT_LOGIN_STATUS = 'TENANT_LOGIN_STATUS',
 }
+
+export enum MsgTemplateCodeEnum {
+  // 注册短信
+  REGISTER_SMS = 'REGISTER_SMS',
+  // 注册邮件验证码
+  REGISTER_EMAIL = 'REGISTER_EMAIL',
+  // 手机登录短信
+  MOBILE_LOGIN = 'MOBILE_LOGIN',
+  MOBILE_EDIT = 'MOBILE_EDIT',
+  EMAIL_EDIT = 'EMAIL_EDIT',
+}

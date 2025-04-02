@@ -28,7 +28,9 @@ export function query(params?: BaseLoginLogPageQuery) {
 export async function pageRequest(pageQuery: PageParams<BaseLoginLogPageQuery>): Promise<UserPageRes> {
   return await page(pageQuery)
 }
-
+export function anyonePage(params: PageParams<BaseLoginLogPageQuery>) {
+  return requestClient.post<PageResult<BaseLoginLogResultVO>>(`${ServicePrefix}/${MODULAR}/page`, params)
+}
 export async function infoRequest(ctx: InfoReq): Promise<UserPageRes> {
   const { row } = ctx
 
