@@ -118,7 +118,8 @@ const enabledRightSide = computed(() => {
     width: 100%;
 
     .toggle-bar {
-      --uno-apply: absolute top-[calc(50% - 36px) ] z-1 h-18 w-8 cursor-pointer;
+      --uno-apply: absolute z-1 h-18 w-8 cursor-pointer;
+      top: calc(50% - 36px);
 
       .toggle-bar__top,
       .toggle-bar__bottom {
