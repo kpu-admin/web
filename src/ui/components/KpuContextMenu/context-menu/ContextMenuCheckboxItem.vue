@@ -3,7 +3,6 @@ import type { ContextMenuCheckboxItemEmits, ContextMenuCheckboxItemProps } from 
 
 import type { HTMLAttributes } from 'vue'
 import { cn } from '@/utils'
-import { Check } from 'lucide-vue-next'
 import {
   ContextMenuCheckboxItem,
 
@@ -34,7 +33,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
   >
     <span class="absolute left-2 h-3.5 w-3.5 flex items-center justify-center">
       <ContextMenuItemIndicator>
-        <Check class="h-4 w-4" />
+        <KpuIcon name="i-lucide:check" :size="16" />
       </ContextMenuItemIndicator>
     </span>
     <slot />

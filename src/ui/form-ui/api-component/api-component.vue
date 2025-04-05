@@ -6,7 +6,6 @@ import type { Component } from 'vue'
 import { get, isEqual, isFunction } from '@/utils'
 
 import { objectOmit } from '@vueuse/core'
-import { LoaderCircle } from 'lucide-vue-next'
 import { computed, ref, unref, useAttrs, watch } from 'vue'
 
 interface OptionsItem {
@@ -204,7 +203,7 @@ function emitChange() {
       <slot :name="item" v-bind="data || {}" />
     </template>
     <template v-if="loadingSlot && loading" #[loadingSlot]>
-      <LoaderCircle class="animate-spin" />
+      <KpuIcon name="i-lucide:loader-circle" class="animate-spin" :size="16" />
     </template>
   </component>
 </template>

@@ -2,7 +2,6 @@
 import type { DropdownMenuSubTriggerProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 import { cn } from '@/utils'
-import { ChevronRight } from 'lucide-vue-next'
 import {
   DropdownMenuSubTrigger,
 
@@ -30,6 +29,7 @@ const forwardedProps = useForwardProps(delegatedProps)
     )"
   >
     <slot />
-    <ChevronRight class="ml-auto h-4 w-4" />
+    <!--    <ChevronRight class="ml-auto h-4 w-4" /> -->
+    <KpuIcon name="i-lucide:chevron-right" :size="16" class="ml-auto" />
   </DropdownMenuSubTrigger>
 </template>

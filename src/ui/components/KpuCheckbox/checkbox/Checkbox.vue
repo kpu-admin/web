@@ -2,7 +2,6 @@
 import type { CheckboxRootEmits, CheckboxRootProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 import { cn } from '@/utils'
-import { Check } from 'lucide-vue-next'
 import { CheckboxIndicator, CheckboxRoot, useForwardPropsEmits } from 'reka-ui'
 import { computed } from 'vue'
 
@@ -25,7 +24,7 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
   >
     <CheckboxIndicator class="h-full w-full flex items-center justify-center text-current">
       <slot>
-        <Check class="h-4 w-4" />
+        <KpuIcon name="i-lucide:check" :size="16" />
       </slot>
     </CheckboxIndicator>
   </CheckboxRoot>
