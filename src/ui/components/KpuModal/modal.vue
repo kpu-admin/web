@@ -5,7 +5,6 @@ import KpuButton from '@/ui/components/KpuButton/index.vue'
 import KpuHelpTooltip from '@/ui/components/KpuTooltip/help-tooltip.vue'
 import { cn } from '@/utils'
 import { globalShareState } from '@/utils/global-state'
-import { Expand, Shrink } from 'lucide-vue-next'
 import { VisuallyHidden } from 'reka-ui'
 
 import { computed, nextTick, provide, ref, useId, watch } from 'vue'
@@ -296,8 +295,8 @@ const getAppendTo = computed(() => {
         class="absolute right-10 top-3 hidden size-6 flex-center rounded-sm px-1 text-lg text-foreground/80 opacity-70 transition-opacity disabled:pointer-events-none sm:block hover:bg-accent hover:text-accent-foreground hover:opacity-100 focus:outline-none"
         @click="handleFullscreen"
       >
-        <Shrink v-if="fullscreen" class="size-3.5" />
-        <Expand v-else class="size-3.5" />
+        <KpuIcon v-if="fullscreen" name="i-lucide:shrink" :size="14" />
+        <KpuIcon v-else name="i-lucide:expand" :size="14" />
       </KpuIconButton>
 
       <DialogFooter

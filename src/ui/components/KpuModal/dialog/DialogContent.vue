@@ -5,7 +5,6 @@ import type { DialogContentEmits, DialogContentProps } from 'reka-ui'
 
 import { cn } from '@/utils'
 
-import { X } from 'lucide-vue-next'
 import {
   DialogClose,
   DialogContent,
@@ -118,7 +117,7 @@ defineExpose({
         "
         @click="() => emits('close')"
       >
-        <X class="h-4 w-4" />
+        <KpuIcon name="i-lucide:x" :size="16" />
       </DialogClose>
     </DialogContent>
   </DialogPortal>

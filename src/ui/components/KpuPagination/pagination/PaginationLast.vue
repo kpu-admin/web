@@ -2,8 +2,6 @@
 import type { PaginationLastProps } from 'reka-ui'
 import { cn } from '@/utils'
 
-import { ChevronsRight } from 'lucide-vue-next'
-
 import { PaginationLast } from 'reka-ui'
 import { computed } from 'vue'
 
@@ -25,7 +23,7 @@ const delegatedProps = computed(() => {
   <PaginationLast v-bind="delegatedProps">
     <KpuButton :class="cn('size-8 p-0', props.class)" variant="outline">
       <slot>
-        <ChevronsRight class="size-4" />
+        <KpuIcon name="i-lucide:chevron-right" :size="16" />
       </slot>
     </KpuButton>
   </PaginationLast>

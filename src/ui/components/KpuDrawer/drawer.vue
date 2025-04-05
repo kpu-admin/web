@@ -5,7 +5,6 @@ import KpuButton from '@/ui/components/KpuButton/index.vue'
 import KpuHelpTooltip from '@/ui/components/KpuTooltip/help-tooltip.vue'
 import { cn } from '@/utils'
 import { globalShareState } from '@/utils/global-state'
-import { X } from 'lucide-vue-next'
 import { Separator, VisuallyHidden } from 'reka-ui'
 import { computed, provide, ref, useId, watch } from 'vue'
 import {
@@ -171,7 +170,7 @@ const getAppendTo = computed(() => {
           >
             <slot name="close-icon">
               <KpuIconButton>
-                <X class="size-4" />
+                <KpuIcon name="i-lucide:x" :size="16" />
               </KpuIconButton>
             </slot>
           </SheetClose>
@@ -211,7 +210,7 @@ const getAppendTo = computed(() => {
           >
             <slot name="close-icon">
               <KpuIconButton>
-                <X class="size-4" />
+                <KpuIcon name="i-lucide:x" :size="16" />
               </KpuIconButton>
             </slot>
           </SheetClose>

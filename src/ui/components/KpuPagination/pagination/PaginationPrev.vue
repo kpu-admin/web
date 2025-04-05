@@ -3,7 +3,6 @@ import type { PaginationPrevProps } from 'reka-ui'
 
 import { cn } from '@/utils'
 
-import { ChevronLeft } from 'lucide-vue-next'
 import { PaginationPrev } from 'reka-ui'
 import { computed } from 'vue'
 
@@ -25,7 +24,7 @@ const delegatedProps = computed(() => {
   <PaginationPrev v-bind="delegatedProps">
     <KpuButton :class="cn('size-8 p-0', props.class)" variant="outline">
       <slot>
-        <ChevronLeft class="size-4" />
+        <KpuIcon name="i-lucide:chevron-left" :size="16" />
       </slot>
     </KpuButton>
   </PaginationPrev>

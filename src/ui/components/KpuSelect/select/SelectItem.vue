@@ -2,7 +2,6 @@
 import type { SelectItemProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 import { cn } from '@/utils'
-import { Check } from 'lucide-vue-next'
 import {
   SelectItem,
   SelectItemIndicator,
@@ -35,7 +34,7 @@ const forwardedProps = useForwardProps(delegatedProps)
   >
     <span class="absolute inset-e-2 h-3.5 w-3.5 flex items-center justify-center">
       <SelectItemIndicator>
-        <Check class="h-4 w-4" />
+        <KpuIcon name="i-lucide:check" :size="16" />
       </SelectItemIndicator>
     </span>
 

@@ -2,7 +2,6 @@
 import type { DropdownMenuRadioItemEmits, DropdownMenuRadioItemProps } from 'reka-ui'
 import type { HTMLAttributes } from 'vue'
 import { cn } from '@/utils'
-import { Circle } from 'lucide-vue-next'
 import {
   DropdownMenuItemIndicator,
   DropdownMenuRadioItem,
@@ -34,7 +33,8 @@ const forwarded = useForwardPropsEmits(delegatedProps, emits)
   >
     <span class="absolute left-2 h-3.5 w-3.5 flex items-center justify-center">
       <DropdownMenuItemIndicator>
-        <Circle class="h-2 w-2 fill-current" />
+        <!--        <Circle class="h-2 w-2 fill-current" /> -->
+        <KpuIcon name="i-lucide:circle" :size="8" />
       </DropdownMenuItemIndicator>
     </span>
     <slot />
