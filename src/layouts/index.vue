@@ -176,9 +176,7 @@ const idMainContent = ELEMENT_ID_MAIN_CONTENT
             <RouterView v-slot="{ Component, route }">
               <Transition :name="settingsStore.settings.mainPage.enableTransition && !settingsStore.isReloading ? settingsStore.settings.mainPage.transitionMode : ''" mode="out-in">
                 <KeepAlive :include="keepAliveStore.list">
-                  <Suspense>
-                    <component :is="Component" v-show="!(isIframe || isLink)" :key="route.fullPath" />
-                  </Suspense>
+                  <component :is="Component" v-show="!(isIframe || isLink)" :key="route.fullPath" />
                 </KeepAlive>
               </Transition>
             </RouterView>

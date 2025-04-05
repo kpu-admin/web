@@ -152,7 +152,7 @@ onUnmounted(() => {
 
         <div class="screen-lock-content">
           <div class="screen-lock-content-title">
-            <img width="180px" :src="userStore.userInfo.avatar" alt="">
+            <img width="180px" class="avatar" :src="userStore.userInfo.avatar" alt="">
             <KpuIcon name="i-ri:lock-2-line" class="i-ri:lock-2-line" />
             {{ $t(title) }} {{ $t('屏幕已锁定') }}
           </div>
@@ -243,6 +243,11 @@ onUnmounted(() => {
           padding: 30px;
           cursor: pointer;
           border-radius: 50%;
+        }
+
+        .avatar:hover {
+          transform: rotate(666turn);
+          transition: all 59s cubic-bezier(0.34, 0, 0.84, 1) 1s;
         }
 
         [class*="i-ri:"] {
