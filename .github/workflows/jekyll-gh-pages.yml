@@ -56,7 +56,7 @@ jobs:
         uses: peaceiris/actions-gh-pages@v4
         with:
           deploy_key: ${{ secrets.PUSH_TO_ANOTHER_REPO_SSH_DEPLOY_KEY }}
-          external_repository: kpu-admin/basic-example
+          external_repository: kpu-admin/kpu-example
           publish_branch: main
           publish_dir: ./dist-example
           enable_jekyll: true
