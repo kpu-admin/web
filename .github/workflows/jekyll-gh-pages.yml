@@ -1,51 +1,92 @@
-# Sample workflow for building and deploying a Jekyll site to GitHub Pages
-name: Deploy Jekyll with GitHub Pages dependencies preinstalled
+name: deploy-example-site
 
 on:
-  # Runs on pushes targeting the default branch
   push:
     branches: [example]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
-
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
-permissions:
-  contents: write
-  pages: write
-  id-token: write
-
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
-concurrency:
-  group: pages
-  cancel-in-progress: false
-
 jobs:
-  build-and-test:
+  deploy:
     runs-on: ubuntu-latest
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v4
+        with:
+          # “最近更新时间” 等 git 日志相关信息，需要拉取全部提交记录
+          fetch-depth: 0
 
       - name: Setup Node.js
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v4
         with:
-          node-version: 20 # 可以根据需要选择Node.js的版本
+          # 选择要使用的 node 版本
+          node-version: 22
+          # registry-url: https://registry.npmmirror.com/
 
-      - name: Install pnpm
-        run: npm install -g pnpm
+      - uses: pnpm/action-setup@v3
+        name: Install pnpm
+        id: pnpm-install
+        with:
+          version: 9
+          run_install: false
+
+      - name: Get pnpm store directory
+        id: pnpm-cache
+        run: |
+          echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+      - uses: actions/cache@v4
+        name: Setup pnpm cache
+        with:
+          path: ${{ env.STORE_PATH }}
+          key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+          restore-keys: |
+            ${{ runner.os }}-pnpm-store-
+
+      - name: Install antfu/ni
+        run: npm i -g @antfu/ni
 
       - name: Install dependencies
-        run: pnpm install
+        run: ni --frozen
 
-      - name: Build project
-        run: pnpm run build
+      # 运行构建脚本
+      - name: Build
+        env:
+          NODE_OPTIONS: --max-old-space-size=8192
+        run: nr build:example
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: deploy
+        uses: peaceiris/actions-gh-pages@v4
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist # 根据您的 Vue 项目配置，这里可能需要修改
-          publish_branch: gh-pages
+          deploy_key: ${{ secrets.PUSH_TO_ANOTHER_REPO_SSH_DEPLOY_KEY }}
+          external_repository: kpu-admin/kpu-example
+          publish_branch: main
+          publish_dir: ./dist-example
+          enable_jekyll: true
+          force_orphan: true
+          user_name: 'github-actions[bot]'
+          user_email: 'github-actions[bot]@users.noreply.github.com'
+
+  # sync:
+  #   runs-on: ubuntu-latest
+  #   needs: deploy
+  #   steps:
+  #     - name: Sync to Gitee
+  #       uses: wearerequired/git-mirror-action@master
+  #       env:
+  #         # 注意在 Settings->Secrets 配置 GITEE_RSA_PRIVATE_KEY
+  #         SSH_PRIVATE_KEY: ${{ secrets.GITEE_RSA_PRIVATE_KEY }}
+  #       with:
+  #         # 注意替换为你的 GitHub 源仓库地址
+  #         source-repo: git@github.com:kpu-admin/basic-example.git
+  #         # 注意替换为你的 Gitee 目标仓库地址
+  #         destination-repo: git@gitee.com:kpu-admin/basic-example.git
+
+  #     - name: Build Gitee Pages
+  #       uses: yanglbme/gitee-pages-action@main
+  #       with:
+  #         # 注意替换为你的 Gitee 用户名
+  #         gitee-username: hooray
+  #         # 注意在 Settings->Secrets 配置 GITEE_PASSWORD
+  #         gitee-password: ${{ secrets.GITEE_PASSWORD }}
+  #         # 注意替换为你的 Gitee 仓库，仓库名严格区分大小写，请准确填写，否则会出错
+  #         gitee-repo: kpu-admin/basic-example
+  #         # 要部署的分支，默认是 master，若是其他分支，则需要指定（指定的分支必须存在）
+  #         branch: main

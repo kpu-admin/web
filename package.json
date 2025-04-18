@@ -10,10 +10,10 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc -b && vite build",
-    "build:test": "vue-tsc && vite build --mode test",
+    "build:example": "vue-tsc -b && vite build --mode example",
     "report": "cross-env REPORT=true npm run build",
     "preview": "vite preview",
-    "serve:test": "http-server ./dist-test -o",
+    "serve:example": "http-server ./dist-example -o",
     "serve": "http-server ./dist -o",
     "svgo": "svgo -f src/assets/icons -r",
     "new": "plop",
